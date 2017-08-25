@@ -21,10 +21,16 @@ class Login extends MY_Controller
 					redirect('admin');
 					break;
 				case 2:
-					redirect('kabag_sumda');
+					redirect('hrd');
 					break;
 				case 3:
-					redirect('admin-gudang');
+					redirect('manajer');
+					break;
+				case 4:
+					redirect('karyawan');
+					break;
+				case 5:
+					redirect('direktur');
 					break;
 			}
 

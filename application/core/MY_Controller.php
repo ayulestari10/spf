@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class MY_Controller extends CI_Controller
 {
-  public $title = ' | POLRESTA PALEMBANG';
+  public $title = ' | SPF';
 	public function __construct()
 	{
 		parent::__construct();
@@ -12,13 +12,7 @@ class MY_Controller extends CI_Controller
 	public function template($data, $template = 'admin')
 	{
 	    if ($template == 'admin') {
-	      return $this->load->view('admin/template/layout', $data);
-	    }
-	    elseif ($template == 'kabag_sumda') {
-	      return $this->load->view('kabag_sumda/template/layout', $data);
-	    }
-      elseif ($template == 'admin-gudang') {
-	      return $this->load->view('admin-gudang/template/layout', $data);
+	      return $this->load->view('template/layout', $data);
 	    }
 	}
 
