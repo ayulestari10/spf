@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 21, 2017 at 08:36 PM
+-- Generation Time: Aug 26, 2017 at 10:44 AM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 5.6.31
 
@@ -74,6 +74,13 @@ CREATE TABLE `jabatan` (
   `nama` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `jabatan`
+--
+
+INSERT INTO `jabatan` (`id_jabatan`, `nama`) VALUES
+(1, 'Dekan 2');
+
 -- --------------------------------------------------------
 
 --
@@ -83,8 +90,6 @@ CREATE TABLE `jabatan` (
 CREATE TABLE `karyawan` (
   `id_karyawan` int(11) NOT NULL,
   `id_departemen` int(11) NOT NULL,
-  `username` varchar(64) NOT NULL,
-  `password` varchar(64) NOT NULL,
   `NIK` int(11) NOT NULL,
   `nama` varchar(32) NOT NULL,
   `tempat_lahir` varchar(225) NOT NULL,
@@ -129,6 +134,28 @@ CREATE TABLE `penilaian` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `role`
+--
+
+CREATE TABLE `role` (
+  `id_role` int(11) NOT NULL,
+  `role` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `role`
+--
+
+INSERT INTO `role` (`id_role`, `role`) VALUES
+(1, 'admin'),
+(2, 'hrd'),
+(3, 'manajer'),
+(4, 'karyawan'),
+(5, 'direktur');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `subkriteria`
 --
 
@@ -141,6 +168,25 @@ CREATE TABLE `subkriteria` (
   `sub_fungsional` text NOT NULL,
   `standar_nilai` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `username` varchar(32) NOT NULL,
+  `password` varchar(64) NOT NULL,
+  `id_role` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`username`, `password`, `id_role`) VALUES
+('azhary', '985fabf8f96dc1c4c306341031569937', 1);
 
 --
 -- Indexes for dumped tables
@@ -196,10 +242,23 @@ ALTER TABLE `penilaian`
   ADD KEY `id_hasil` (`id_hasil`);
 
 --
+-- Indexes for table `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`id_role`);
+
+--
 -- Indexes for table `subkriteria`
 --
 ALTER TABLE `subkriteria`
   ADD PRIMARY KEY (`id_subkriteria`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`username`),
+  ADD KEY `id_role` (`id_role`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -219,7 +278,7 @@ ALTER TABLE `hasil_penilaian`
 -- AUTO_INCREMENT for table `jabatan`
 --
 ALTER TABLE `jabatan`
-  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `karyawan`
 --
@@ -235,6 +294,11 @@ ALTER TABLE `kriteria`
 --
 ALTER TABLE `penilaian`
   MODIFY `id_penilaian` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `role`
+--
+ALTER TABLE `role`
+  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `subkriteria`
 --
