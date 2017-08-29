@@ -43,7 +43,7 @@ class Login extends MY_Controller
   {
     if ($this->POST('login-submit'))
 		{
-      if (!$this->User_m->required_input(['username','password'])) {
+      if (!$this->Karyawan_m->required_input(['username','password'])) {
         $this->flashmsg('Data harus lengkap','warning');
         redirect('login');
       }

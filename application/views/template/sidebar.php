@@ -8,8 +8,11 @@
                 <img src="<?=base_url('assets/img/avatar.jpg')?>" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-                <p>Hello <?= $username ?></p>
-
+                <?php if(isset($username)): ?>
+                    <p>Hello <?= $username ?></p>
+                <?php else: ?>
+                    <p>Hello User</p>
+                <?php endif; ?>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -52,7 +55,30 @@
                 </a>
             </li>
         </ul>
+        
+        <?php elseif($id_role == 4): ?>
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="<?= base_url('Karyawan') ?>">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="<?= base_url('karyawan/data_karyawan') ?>">
+                    <i class="fa fa-user"></i>
+                    <span>Karyawan</span>
+                </a>
+            </li>
+            <li>
+                <a href="<?= base_url('karyawan/hasil_penilaian') ?>">
+                    <i class="fa fa-book"></i>
+                    <span>Hasil Karyawan</span>
+                </a>
+            </li>
+        </ul>
+
         <?php else: ?>
+        
         <ul class="sidebar-menu">
             <li class="active">
                 <a href="<?= base_url('') ?>">

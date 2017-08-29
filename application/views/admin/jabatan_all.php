@@ -98,7 +98,7 @@
             <?= form_open("admin/jabatan") ?>
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Data jabatan</h4>
+                <h4 class="modal-title">Edit Data Jabatan</h4>
               </div>
               <div class="modal-body">
                     <input type="hidden" name="edit_id_jabatan" id="edit_id_jabatan">
@@ -135,7 +135,7 @@
         
         function get_jabatan(id_jabatan) {
             $.ajax({
-                url: "<?= base_url('admin/jabatan') ?>",
+                url: "<?= base_url('admin/Jabatan') ?>",
                 type: 'POST',
                 data: {
                     id_jabatan: id_jabatan,
@@ -155,14 +155,14 @@
         
         function delete_jabatan(id_jabatan) {
             $.ajax({
-                url: "<?= base_url('admin/jabatan') ?>",
+                url: "<?= base_url('admin/Jabatan') ?>",
                 type: 'POST',
                 data: {
                     id_jabatan: id_jabatan,
                     delete: true
                 },
                 success: function() {
-                    window.location = "<?= base_url('admin/jabatan') ?>";
+                    window.location = "<?= base_url('admin/Jabatan') ?>";
                 }
             });   
         }

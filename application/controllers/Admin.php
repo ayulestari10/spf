@@ -11,26 +11,24 @@ class Admin extends MY_Controller
   	function __construct()
 	{
 	    parent::__construct();		
-		$this->data['username'] = $this->session->userdata('username');
-		if (!isset($this->data['username']))
-		{
-			redirect('login');
-			exit;
-		}
+		// $this->data['username'] = $this->session->userdata('username');
+		// if (!isset($this->data['username']))
+		// {
+		// 	redirect('login');
+		// 	exit;
+		// }
 		
-		$this->data['id_role'] = $this->session->userdata('id_role');
-		if (!isset($this->data['id_role']) && $this->data['id_role'] != 1)
-		{
-			$this->session->unset_userdata('username');
-			$this->session->unset_userdata('id_role');
-			redirect('login');
-			exit;
-		}
+		// $this->data['id_role'] = $this->session->userdata('id_role');
+		// if (!isset($this->data['id_role']) && $this->data['id_role'] != 1)
+		// {
+		// 	$this->session->unset_userdata('username');
+		// 	$this->session->unset_userdata('id_role');
+		// 	redirect('login');
+		// 	exit;
+		// }
 
 		$this->load->model('Jabatan_m');
-		$this->load->model('Acc_penilaian_m');
 		$this->load->model('Departemen_m');
-		$this->load->model('Hasil_penilaian_m');
 		$this->load->model('Karyawan_m');
 		$this->load->model('Kriteria_m');
 		$this->load->model('Penilaian_m');
@@ -55,6 +53,7 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_jabatan" => $this->POST("id_jabatan"),
+				"id_departemen" => $this->POST("id_departemen"),
 				"nama" => $this->POST("nama"),
 			];
 			$this->Jabatan_m->insert($this->data['entry']);
@@ -72,6 +71,7 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_jabatan" => $this->POST("id_jabatan"),
+				"id_departemen" => $this->POST("id_departemen"),
 				"nama" => $this->POST("nama"),
 			];
 			$this->Jabatan_m->update($this->POST('edit_id_jabatan'), $this->data['entry']);
@@ -87,7 +87,7 @@ class Admin extends MY_Controller
 		}
 				
 		$this->data['data']		= $this->Jabatan_m->get();
-		$this->data['columns']	= ["id_jabatan","nama",];
+		$this->data['columns']	= ["id_jabatan","id_departemen","nama",];
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/jabatan_all';
 		$this->template($this->data);
@@ -103,74 +103,10 @@ class Admin extends MY_Controller
 			exit;
 		}
 
-		$this->data['columns']	= ["id_jabatan","nama",];
+		$this->data['columns']	= ["id_jabatan","id_departemen","nama",];
 		$this->data['data'] = $this->Jabatan_m->get_row(['id_jabatan' => $this->data['id_jabatan']]);
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/jabatan_detail';
-		$this->template($this->data);
-	}
-
-
-	public function acc_penilaian()
-	{
-		if ($this->POST('insert'))
-		{
-			$this->data['entry'] = [
-				"id_hasil" => $this->POST("id_hasil"),
-				"status_acc" => $this->POST("status_acc"),
-				"tgl_acc" => $this->POST("tgl_acc"),
-			];
-			$this->Acc_penilaian_m->insert($this->data['entry']);
-			redirect('admin/acc_penilaian');
-			exit;
-		}
-		
-		if ($this->POST('delete') && $this->POST('id_hasil'))
-		{
-			$this->Acc_penilaian_m->delete($this->POST('id_hasil'));
-			exit;
-		}
-				
-		if ($this->POST('edit') && $this->POST('edit_id_hasil'))
-		{
-			$this->data['entry'] = [
-				"id_hasil" => $this->POST("id_hasil"),
-				"status_acc" => $this->POST("status_acc"),
-				"tgl_acc" => $this->POST("tgl_acc"),
-			];
-			$this->Acc_penilaian_m->update($this->POST('edit_id_hasil'), $this->data['entry']);
-			redirect('admin/acc_penilaian');
-			exit;
-		}
-
-		if ($this->POST('get') && $this->POST('id_hasil'))
-		{
-			$this->data['acc_penilaian'] = $this->Acc_penilaian_m->get_row(['id_hasil' => $this->POST('id_hasil')]);
-			echo json_encode($this->data['acc_penilaian']);
-			exit;
-		}
-				
-		$this->data['data']		= $this->Acc_penilaian_m->get();
-		$this->data['columns']	= ["id_hasil","status_acc","tgl_acc",];
-		$this->data['title'] 	= 'Title';
-		$this->data['content'] 	= 'admin/acc_penilaian_all';
-		$this->template($this->data);
-	}
-
-
-	public function detail_acc_penilaian()
-	{
-		$this->data['id_hasil'] = $this->uri->segment(3);
-		if (!isset($this->data['id_hasil']))
-		{
-			redirect('admin/acc_penilaian');
-			exit;
-		}
-
-		$this->data['columns']	= ["id_hasil","status_acc","tgl_acc",];
-		$this->data['data'] = $this->Acc_penilaian_m->get_row(['id_hasil' => $this->data['id_hasil']]);
-		$this->data['title'] 	= 'Title';
-		$this->data['content'] 	= 'admin/acc_penilaian_detail';
 		$this->template($this->data);
 	}
 
@@ -180,7 +116,6 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_departemen" => $this->POST("id_departemen"),
-				"id_jabatan" => $this->POST("id_jabatan"),
 				"nama" => $this->POST("nama"),
 			];
 			$this->Departemen_m->insert($this->data['entry']);
@@ -198,7 +133,6 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_departemen" => $this->POST("id_departemen"),
-				"id_jabatan" => $this->POST("id_jabatan"),
 				"nama" => $this->POST("nama"),
 			];
 			$this->Departemen_m->update($this->POST('edit_id_departemen'), $this->data['entry']);
@@ -214,7 +148,7 @@ class Admin extends MY_Controller
 		}
 				
 		$this->data['data']		= $this->Departemen_m->get();
-		$this->data['columns']	= ["id_departemen","id_jabatan","nama",];
+		$this->data['columns']	= ["id_departemen","nama",];
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/departemen_all';
 		$this->template($this->data);
@@ -230,83 +164,10 @@ class Admin extends MY_Controller
 			exit;
 		}
 
-		$this->data['columns']	= ["id_departemen","id_jabatan","nama",];
+		$this->data['columns']	= ["id_departemen","nama",];
 		$this->data['data'] = $this->Departemen_m->get_row(['id_departemen' => $this->data['id_departemen']]);
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/departemen_detail';
-		$this->template($this->data);
-	}
-
-	public function hasil_penilaian()
-	{
-		if ($this->POST('insert'))
-		{
-			$this->data['entry'] = [
-				"id_hasil" => $this->POST("id_hasil"),
-				"id_penilaian" => $this->POST("id_penilaian"),
-				"gap" => $this->POST("gap"),
-				"bobot_nilai" => $this->POST("bobot_nilai"),
-				"core_factor" => $this->POST("core_factor"),
-				"secondary_factor" => $this->POST("secondary_factor"),
-				"total_nilai" => $this->POST("total_nilai"),
-				"hasil_akhir" => $this->POST("hasil_akhir"),
-			];
-			$this->Hasil_penilaian_m->insert($this->data['entry']);
-			redirect('admin/hasil_penilaian');
-			exit;
-		}
-		
-		if ($this->POST('delete') && $this->POST('id_hasil'))
-		{
-			$this->Hasil_penilaian_m->delete($this->POST('id_hasil'));
-			exit;
-		}
-				
-		if ($this->POST('edit') && $this->POST('edit_id_hasil'))
-		{
-			$this->data['entry'] = [
-				"id_hasil" => $this->POST("id_hasil"),
-				"id_penilaian" => $this->POST("id_penilaian"),
-				"gap" => $this->POST("gap"),
-				"bobot_nilai" => $this->POST("bobot_nilai"),
-				"core_factor" => $this->POST("core_factor"),
-				"secondary_factor" => $this->POST("secondary_factor"),
-				"total_nilai" => $this->POST("total_nilai"),
-				"hasil_akhir" => $this->POST("hasil_akhir"),
-			];
-			$this->Hasil_penilaian_m->update($this->POST('edit_id_hasil'), $this->data['entry']);
-			redirect('admin/hasil_penilaian');
-			exit;
-		}
-
-		if ($this->POST('get') && $this->POST('id_hasil'))
-		{
-			$this->data['hasil_penilaian'] = $this->Hasil_penilaian_m->get_row(['id_hasil' => $this->POST('id_hasil')]);
-			echo json_encode($this->data['hasil_penilaian']);
-			exit;
-		}
-				
-		$this->data['data']		= $this->Hasil_penilaian_m->get();
-		$this->data['columns']	= ["id_hasil","id_penilaian","gap","bobot_nilai","core_factor","secondary_factor","total_nilai","hasil_akhir",];
-		$this->data['title'] 	= 'Title';
-		$this->data['content'] 	= 'admin/hasil_penilaian_all';
-		$this->template($this->data);
-	}
-
-
-	public function detail_hasil_penilaian()
-	{
-		$this->data['id_hasil'] = $this->uri->segment(3);
-		if (!isset($this->data['id_hasil']))
-		{
-			redirect('admin/hasil_penilaian');
-			exit;
-		}
-
-		$this->data['columns']	= ["id_hasil","id_penilaian","gap","bobot_nilai","core_factor","secondary_factor","total_nilai","hasil_akhir",];
-		$this->data['data'] = $this->Hasil_penilaian_m->get_row(['id_hasil' => $this->data['id_hasil']]);
-		$this->data['title'] 	= 'Title';
-		$this->data['content'] 	= 'admin/hasil_penilaian_detail';
 		$this->template($this->data);
 	}
 
@@ -317,6 +178,9 @@ class Admin extends MY_Controller
 			$this->data['entry'] = [
 				"id_karyawan" => $this->POST("id_karyawan"),
 				"id_departemen" => $this->POST("id_departemen"),
+				"id_jabatan" => $this->POST("id_jabatan"),
+				"username" => $this->POST("username"),
+				"password" => $this->POST("password"),
 				"NIK" => $this->POST("NIK"),
 				"nama" => $this->POST("nama"),
 				"tempat_lahir" => $this->POST("tempat_lahir"),
@@ -342,6 +206,9 @@ class Admin extends MY_Controller
 			$this->data['entry'] = [
 				"id_karyawan" => $this->POST("id_karyawan"),
 				"id_departemen" => $this->POST("id_departemen"),
+				"id_jabatan" => $this->POST("id_jabatan"),
+				"username" => $this->POST("username"),
+				"password" => $this->POST("password"),
 				"NIK" => $this->POST("NIK"),
 				"nama" => $this->POST("nama"),
 				"tempat_lahir" => $this->POST("tempat_lahir"),
@@ -364,7 +231,7 @@ class Admin extends MY_Controller
 		}
 				
 		$this->data['data']		= $this->Karyawan_m->get();
-		$this->data['columns']	= ["id_karyawan","id_departemen","NIK","nama","tempat_lahir","tgl_lahir","jenis_kelamin","agama","alamat","pendidikan",];
+		$this->data['columns']	= ["id_karyawan","id_departemen","id_jabatan","username","password","NIK","nama","tempat_lahir","tgl_lahir","jenis_kelamin","agama","alamat","pendidikan",];
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/karyawan_all';
 		$this->template($this->data);
@@ -380,7 +247,7 @@ class Admin extends MY_Controller
 			exit;
 		}
 
-		$this->data['columns']	= ["id_karyawan","id_departemen","NIK","nama","tempat_lahir","tgl_lahir","jenis_kelamin","agama","alamat","pendidikan",];
+		$this->data['columns']	= ["id_karyawan","id_departemen","id_jabatan","username","password","NIK","nama","tempat_lahir","tgl_lahir","jenis_kelamin","agama","alamat","pendidikan",];
 		$this->data['data'] = $this->Karyawan_m->get_row(['id_karyawan' => $this->data['id_karyawan']]);
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/karyawan_detail';
@@ -432,7 +299,7 @@ class Admin extends MY_Controller
 				
 		$this->data['data']		= $this->Kriteria_m->get();
 		$this->data['columns']	= ["id_kriteria","id_subkriteria","kompetensi_inti","kompetensi_peran","kompetensi_fungsional",];
-		$this->data['title'] 	= 'Title';
+		$this->data['title'] 	= 'Kriteria';
 		$this->data['content'] 	= 'admin/kriteria_all';
 		$this->template($this->data);
 	}
@@ -449,7 +316,7 @@ class Admin extends MY_Controller
 
 		$this->data['columns']	= ["id_kriteria","id_subkriteria","kompetensi_inti","kompetensi_peran","kompetensi_fungsional",];
 		$this->data['data'] = $this->Kriteria_m->get_row(['id_kriteria' => $this->data['id_kriteria']]);
-		$this->data['title'] 	= 'Title';
+		$this->data['title'] 	= 'Detail Kriteria';
 		$this->data['content'] 	= 'admin/kriteria_detail';
 		$this->template($this->data);
 	}
@@ -505,7 +372,7 @@ class Admin extends MY_Controller
 				
 		$this->data['data']		= $this->Penilaian_m->get();
 		$this->data['columns']	= ["id_penilaian","id_karyawan","id_kriteria","id_hasil","requirement","penilaian","tgl_penelitian","thn_penelitian",];
-		$this->data['title'] 	= 'Title';
+		$this->data['title'] 	= 'Penilaian';
 		$this->data['content'] 	= 'admin/penilaian_all';
 		$this->template($this->data);
 	}
@@ -522,7 +389,7 @@ class Admin extends MY_Controller
 
 		$this->data['columns']	= ["id_penilaian","id_karyawan","id_kriteria","id_hasil","requirement","penilaian","tgl_penelitian","thn_penelitian",];
 		$this->data['data'] = $this->Penilaian_m->get_row(['id_penilaian' => $this->data['id_penilaian']]);
-		$this->data['title'] 	= 'Title';
+		$this->data['title'] 	= 'Detail Penilaian';
 		$this->data['content'] 	= 'admin/penilaian_detail';
 		$this->template($this->data);
 	}
@@ -533,11 +400,9 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_subkriteria" => $this->POST("id_subkriteria"),
+				"id_kriteria" => $this->POST("id_kriteria"),
+				"id_kelompok_nilai" => $this->POST("id_kelompok_nilai"),
 				"nama" => $this->POST("nama"),
-				"pengalaman" => $this->POST("pengalaman"),
-				"sub_inti" => $this->POST("sub_inti"),
-				"sub_peran" => $this->POST("sub_peran"),
-				"sub_fungsional" => $this->POST("sub_fungsional"),
 				"standar_nilai" => $this->POST("standar_nilai"),
 			];
 			$this->Subkriteria_m->insert($this->data['entry']);
@@ -555,11 +420,9 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_subkriteria" => $this->POST("id_subkriteria"),
+				"id_kriteria" => $this->POST("id_kriteria"),
+				"id_kelompok_nilai" => $this->POST("id_kelompok_nilai"),
 				"nama" => $this->POST("nama"),
-				"pengalaman" => $this->POST("pengalaman"),
-				"sub_inti" => $this->POST("sub_inti"),
-				"sub_peran" => $this->POST("sub_peran"),
-				"sub_fungsional" => $this->POST("sub_fungsional"),
 				"standar_nilai" => $this->POST("standar_nilai"),
 			];
 			$this->Subkriteria_m->update($this->POST('edit_id_subkriteria'), $this->data['entry']);
@@ -575,7 +438,7 @@ class Admin extends MY_Controller
 		}
 				
 		$this->data['data']		= $this->Subkriteria_m->get();
-		$this->data['columns']	= ["id_subkriteria","nama","pengalaman","sub_inti","sub_peran","sub_fungsional","standar_nilai",];
+		$this->data['columns']	= ["id_subkriteria","id_kriteria","id_kelompok_nilai","nama","standar_nilai",];
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/subkriteria_all';
 		$this->template($this->data);
@@ -591,11 +454,10 @@ class Admin extends MY_Controller
 			exit;
 		}
 
-		$this->data['columns']	= ["id_subkriteria","nama","pengalaman","sub_inti","sub_peran","sub_fungsional","standar_nilai",];
+		$this->data['columns']	= ["id_subkriteria","id_kriteria","id_kelompok_nilai","nama","standar_nilai",];
 		$this->data['data'] = $this->Subkriteria_m->get_row(['id_subkriteria' => $this->data['id_subkriteria']]);
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/subkriteria_detail';
 		$this->template($this->data);
 	}
-
 }

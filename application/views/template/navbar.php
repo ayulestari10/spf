@@ -19,7 +19,12 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span><?= $username ?> <i class="caret"></i></span>
+                                
+                                <?php if(isset($username)): ?>
+                                    <span><?= $username ?> <i class="caret"></i></span>
+                                <?php else: ?>
+                                    <span>User <i class="caret"></i></span>
+                                <?php endif; ?>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-footer">
