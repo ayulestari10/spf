@@ -9,7 +9,6 @@ class Gap_analysis_m extends MY_Model
 
 	public function gap($profil_karyawan, $profil_jabatan)
 	{
-		
 		return $profil_karyawan - $profil_jabatan;
 	}
 

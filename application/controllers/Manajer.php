@@ -82,4 +82,9 @@ class Manajer extends MY_Controller
 
 		echo '<h3>Performance: ' . $this->gap_analysis_m->performance($aspect_ki, $aspect_kp, $aspect_kf) . '</h3>';
 	}
+
+	public function kriteria_penilaian()
+	{
+		
+	}
 }
