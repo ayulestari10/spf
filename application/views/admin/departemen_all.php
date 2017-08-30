@@ -98,7 +98,7 @@
             <?= form_open("admin/departemen") ?>
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Data departemen</h4>
+                <h4 class="modal-title">Edit Data Departemen</h4>
               </div>
               <div class="modal-body">
                     <input type="hidden" name="edit_id_departemen" id="edit_id_departemen">
@@ -135,7 +135,7 @@
         
         function get_departemen(id_departemen) {
             $.ajax({
-                url: "<?= base_url('admin/departemen') ?>",
+                url: "<?= base_url('admin/Departemen') ?>",
                 type: 'POST',
                 data: {
                     id_departemen: id_departemen,
@@ -155,14 +155,14 @@
         
         function delete_departemen(id_departemen) {
             $.ajax({
-                url: "<?= base_url('admin/departemen') ?>",
+                url: "<?= base_url('admin/Departemen') ?>",
                 type: 'POST',
                 data: {
                     id_departemen: id_departemen,
                     delete: true
                 },
                 success: function() {
-                    window.location = "<?= base_url('admin/departemen') ?>";
+                    window.location = "<?= base_url('admin/Departemen') ?>";
                 }
             });   
         }
