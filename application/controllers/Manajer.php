@@ -83,25 +83,29 @@ class Manajer extends MY_Controller
 		echo '<h3>Performance: ' . $this->gap_analysis_m->performance($aspect_ki, $aspect_kp, $aspect_kf) . '</h3>';
 	}
 
-	public function penilaian(){
+	public function penilaian()
+	{
 		$this->data['title'] 	= 'Data Penilaian';
 		$this->data['content'] 	= 'manajer/penilaian';
 		$this->template($this->data);
 	}
 
-	public function penilaian_detail(){
+	public function penilaian_detail()
+	{
 		$this->data['title'] 	= 'Detail Penilaian';
 		$this->data['content'] 	= 'manajer/penilaian_detail';
 		$this->template($this->data);
 	}
 
-	public function input_penilaian(){
+	public function input_penilaian()
+	{
 		$this->data['title'] 	= 'Input Penilaian';
 		$this->data['content'] 	= 'manajer/input_penilaian';
 		$this->template($this->data);
 	}
 
-	public function input_kriteria(){
+	public function input_kriteria()
+	{
 		$this->data['title'] 	= 'Input Kriteria Penilaian';
 		$this->data['content'] 	= 'manajer/input_kriteria';
 		$this->template($this->data);
