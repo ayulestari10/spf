@@ -5,6 +5,17 @@ class Manajer extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->data['id_departemen'] 	= $this->session->userdata('id_departemen');
+		$this->data['id_jabatan']		= $this->session->userdata('id_jabatan');
+
+		if ($this->data['id_departemen'] != 2 && $this->data['id_jabatan'] != 3)
+		{
+			redirect('logout');
+			$this->flashmsg('Anda tidak diizinkan untuk mengakses halaman ini','danger');
+			exit;
+		}
+		$this->data['username'] = $this->session->userdata('username');
 	}
 
 	public function index()

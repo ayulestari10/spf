@@ -11,21 +11,16 @@ class Admin extends MY_Controller
   	function __construct()
 	{
 	    parent::__construct();		
-		// $this->data['username'] = $this->session->userdata('username');
-		// if (!isset($this->data['username']))
-		// {
-		// 	redirect('login');
-		// 	exit;
-		// }
-		
-		// $this->data['id_role'] = $this->session->userdata('id_role');
-		// if (!isset($this->data['id_role']) && $this->data['id_role'] != 1)
-		// {
-		// 	$this->session->unset_userdata('username');
-		// 	$this->session->unset_userdata('id_role');
-		// 	redirect('login');
-		// 	exit;
-		// }
+		$this->data['id_departemen'] 	= $this->session->userdata('id_departemen');
+		$this->data['id_jabatan']		= $this->session->userdata('id_jabatan');
+
+		if ($this->data['id_departemen'] != 1 && $this->data['id_jabatan'] != 2)
+		{
+			redirect('logout');
+			$this->flashmsg('Anda tidak diizinkan untuk mengakses halaman ini','danger');
+			exit;
+		}
+		$this->data['username'] = $this->session->userdata('username');
 
 		$this->load->model('Jabatan_m');
 		$this->load->model('Departemen_m');
