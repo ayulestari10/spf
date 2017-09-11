@@ -17,7 +17,7 @@
             </div>
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
-        <?php if($id_role == 1): ?>
+        <?php if(isset($id_role) && $id_role == 1): ?>
         <ul class="sidebar-menu">
             <li class="active">
                 <a href="<?= base_url('admin') ?>">
@@ -56,7 +56,7 @@
             </li>
         </ul>
         
-        <?php elseif($id_role == 4): ?>
+        <?php elseif(isset($id_role) && $id_role == 4): ?>
         <ul class="sidebar-menu">
             <li class="active">
                 <a href="<?= base_url('Karyawan') ?>">

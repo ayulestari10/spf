@@ -29,17 +29,48 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach ($karyawan as $row): ?>
                                     <tr>
-                                        <td>09021181520021</td>
-                                        <td>Ayu Lestari</td>
-                                        <td>Finance</td>
-                                        <td>Sekretaris</td>
-                                        <td>Valid</td>
+                                        <td><?= $row->NIK ?></td>
+                                        <td><?= $row->nama ?></td>
+                                        <td>
+                                            <?php 
+                                                $departemen = $this->departemen_m->get_row(['id_departemen' => $row->id_departemen]);
+                                                if (isset($departemen))
+                                                {
+                                                    echo $departemen->nama;
+                                                }
+                                                else
+                                                {
+                                                    echo '<font color="red">Data departemen tidak ditemukan</font>';
+                                                }
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php 
+                                                $jabatan = $this->jabatan_m->get_row(['id_jabatan' => $row->id_jabatan]);
+                                                if (isset($jabatan))
+                                                {
+                                                    echo $jabatan->nama;
+                                                }
+                                                else
+                                                {
+                                                    echo '<font color="red">Data jabatan tidak ditemukan</font>';
+                                                }
+                                            ?>
+                                        </td>
+                                        <td id="karyawan-<?= $row->id_karyawan ?>"><button class="btn btn-success btn-sm" onclick="acc_penilaian(<?= $row->id_karyawan ?>);"><i class="fa fa-check"></i> Valid</button></td>
                                         <td align="center">
-                                            <button class="btn btn-success" onclick="">Valid</button>
-                                            <a href="<?= base_url('manajer/penilaian_detail/') ?>" class="btn btn-info waves-effect">Details</a>
+                                            <?php  
+                                                $check_nilai = $this->nilai_m->get([
+                                                    'id_penilaian'  => $id_penilaian,
+                                                    'id_karyawan'   => $row->id_karyawan
+                                                ]);
+                                            ?>
+                                            <a href="<?= base_url('manajer/input-nilai-karyawan?id_penilaian=' . $id_penilaian . '&id_karyawan=' . $row->id_karyawan) ?>" class="btn btn-<?= count($check_nilai) > 0 ? 'success' : 'primary' ?> btn-sm waves-effect"><i class="fa fa-edit"></i> Beri nilai</a>
                                         </td>
                                     </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                             <!-- /.table-responsive -->
@@ -62,4 +93,23 @@
                 responsive: true
             });
         });
+
+        function acc_penilaian(id_karyawan) {
+            $.ajax({
+                url: '<?= base_url('manajer/penilaian-detail?id_penilaian=' . $id_penilaian) ?>',
+                type: 'POST',
+                data: {
+                    validasi: true,
+                    id_karyawan: id_karyawan
+                },
+                success: function(response) {
+                    
+                },
+                error: function(e) {
+                    console.log(e.responseText);
+                }
+            });
+
+            return false;
+        }
 </script>

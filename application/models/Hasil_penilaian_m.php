@@ -8,5 +8,10 @@ class Hasil_penilaian_m extends MY_Model
 		$this->data['table_name']  = 'hasil_penilaian';
 		$this->data['primary_key'] = 'id_hasil';
 	}
+
+	public function get_rank()
+	{
+		// TODO: mengurutkan hasil akhir karyawan dari yang tertinggi - terendah
+	}
 }
 
