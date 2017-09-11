@@ -11,54 +11,53 @@ class Login extends MY_Controller
   function __construct()
   {
     parent::__construct();
-    $username = $this->session->userdata('username');
-		if (isset($username))
+    $id_departemen 	= $this->session->userdata('id_departemen');
+    $id_jabatan		= $this->session->userdata('id_jabatan');
+		if (isset($id_departemen,$id_jabatan))
 		{
-			$this->data['id_role'] = $this->session->userdata('id_role');
-			switch ($this->data['id_role'])
+			if($id_departemen == 2 && $id_jabatan == 3)
 			{
-				case 1:
-					redirect('admin');
-					break;
-				case 2:
-					redirect('hrd');
-					break;
-				case 3:
-					redirect('manajer');
-					break;
-				case 4:
-					redirect('karyawan');
-					break;
-				case 5:
-					redirect('direktur');
-					break;
+				redirect('manajer');
+			}
+			elseif($id_departemen == 1 && $id_jabatan == 2)
+			{
+				redirect('admin');
+			}
+			else
+			{
+				redirect('login');
+				$this->flashmsg('Akun anda tidak terdaftar','danger');
 			}
 
 			exit;
 		}
-    $this->load->model('User_m');
+     $this->load->model('Karyawan_m');
   }
 
   public function index()
   {
     if ($this->POST('login-submit'))
-		{
-      if (!$this->Karyawan_m->required_input(['username','password'])) {
-        $this->flashmsg('Data harus lengkap','warning');
-        redirect('login');
-      }
-			$this->data = [
-				'username'	=> $this->POST('username'),
-				'password'	=> md5($this->POST('password'))
-			];
+	{
 
-			$result = $this->User_m->login($this->data);
-      if (!isset($result)) {
-        $this->flashmsg('Username atau password salah','danger');
-      }
-			redirect('login');
-			exit;
-		}
+	    if (!$this->Karyawan_m->required_input(['username','password'])) {
+	        $this->flashmsg('Data harus lengkap','warning');
+	        redirect('login');
+	    }
+
+		$data = [
+			'username'	=> $this->POST('username'),
+			'password'	=> md5($this->POST('password'))
+		];
+
+		$result = $this->Karyawan_m->check_login($data['username'], $data['password']);
+				
+	    if (!isset($result)) {
+	        $this->flashmsg('Username atau password salah','danger');
+	    }
+
+		redirect('login');
+		exit;
+	}
     $this->data['title'] = 'LOGIN'.$this->title;
     $this->load->view('login',$this->data);
   }
