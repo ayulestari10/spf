@@ -8,57 +8,65 @@ class Login extends MY_Controller
 
 	private $data = [];
 
-  function __construct()
-  {
-    parent::__construct();
-    $id_departemen 	= $this->session->userdata('id_departemen');
-    $id_jabatan		= $this->session->userdata('id_jabatan');
-		if (isset($id_departemen,$id_jabatan))
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->data['username'] = $this->session->userdata('username');
+		if (isset($this->data['username']))
 		{
-			if($id_departemen == 2 && $id_jabatan == 3)
+			$this->data['id_departemen'] 	= $this->session->userdata('id_departemen');
+			$this->data['id_jabatan']		= $this->session->userdata('id_jabatan');
+
+			if (isset($this->data['id_departemen'], $this->data['id_jabatan']))
 			{
-				redirect('manajer');
+				if ($this->data['id_jabatan'] == 2)
+				{
+					redirect('manajer');
+				}
+				else if ($this->data['id_jabatan'] == 3)
+				{
+					redirect('direktur');
+				}
+				else
+				{
+					redirect('karyawan');
+				}
+				exit;
 			}
-			elseif($id_departemen == 1 && $id_jabatan == 2)
+		}
+	}
+
+ 
+
+	public function index()
+	{
+		if ($this->POST('login-submit'))
+		{
+			$this->load->model('Karyawan_m');
+			if (!$this->Karyawan_m->required_input(['username','password'])) 
 			{
-				redirect('admin');
-			}
-			else
-			{
+				$this->flashmsg('Data harus lengkap','warning');
 				redirect('login');
-				$this->flashmsg('Akun anda tidak terdaftar','danger');
+				exit;
 			}
 
+			$data = [
+				'username'	=> $this->POST('username'),
+				'password'	=> md5($this->POST('password'))
+			];
+
+			$result = $this->Karyawan_m->check_login($data['username'], $data['password']);
+
+			if (!isset($result)) 
+			{
+				$this->flashmsg('Username atau password salah','danger');
+			}
+
+			redirect('login');
 			exit;
 		}
-     $this->load->model('Karyawan_m');
-  }
-
-  public function index()
-  {
-    if ($this->POST('login-submit'))
-	{
-
-	    if (!$this->Karyawan_m->required_input(['username','password'])) {
-	        $this->flashmsg('Data harus lengkap','warning');
-	        redirect('login');
-	    }
-
-		$data = [
-			'username'	=> $this->POST('username'),
-			'password'	=> md5($this->POST('password'))
-		];
-
-		$result = $this->Karyawan_m->check_login($data['username'], $data['password']);
-				
-	    if (!isset($result)) {
-	        $this->flashmsg('Username atau password salah','danger');
-	    }
-
-		redirect('login');
-		exit;
+		$this->data['title'] = 'LOGIN'.$this->title;
+		$this->load->view('login',$this->data);
 	}
-    $this->data['title'] = 'LOGIN'.$this->title;
-    $this->load->view('login',$this->data);
-  }
 }

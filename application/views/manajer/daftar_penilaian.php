@@ -37,7 +37,7 @@
                                         <td><?= $row->tgl_penilaian ?></td>
                                         <td><?= $row->thn_penilaian ?></td>
                                         <td align="center">
-                                            <a href="<?= base_url('manajer/penilaian-detail?id_penilaian=' . $row->id_penilaian) ?>" class="btn btn-primary waves-effect"><i class="fa fa-eye"></i> View</a>
+                                            <a href="<?= base_url((($id_jabatan == 2) ? 'manajer' : ($id_jabatan == 3 ? 'direktur' : 'karyawan')) . '/penilaian-detail?id_penilaian=' . $row->id_penilaian) ?>" class="btn btn-primary waves-effect"><i class="fa fa-eye"></i> View</a>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

@@ -9,7 +9,7 @@ class Manajer extends MY_Controller
 		$this->data['id_departemen'] 	= $this->session->userdata('id_departemen');
 		$this->data['id_jabatan']		= $this->session->userdata('id_jabatan');
 
-		if ($this->data['id_departemen'] != 2 && $this->data['id_jabatan'] != 3)
+		if ($this->data['id_jabatan'] != 2)
 		{
 			redirect('logout');
 			$this->flashmsg('Anda tidak diizinkan untuk mengakses halaman ini','danger');
@@ -20,78 +20,7 @@ class Manajer extends MY_Controller
 
 	public function index()
 	{
-		$this->load->model('gap_analysis_m');
-		$this->load->model('nilai_m');
-		$standar_nilai = $this->gap_analysis_m->profil_jabatan(4, 1, 1);
-		$profil_jabatan = [];
-		foreach ($standar_nilai as $row)
-		{
-			$profil_jabatan []= $row->profil_jabatan;
-		}
-
-		$nilai_karyawan = $this->nilai_m->get(['id_karyawan' => 1]);
-		echo '<h3>Kompetensi Inti</h3>';
-		echo '<table>';
-		echo '<thead>
-					<tr>
-						<th>Kompetensi Inti</th>
-						<th>K001</th>
-						<th>Profil Jabatan</th>
-						<th>Gap</th>
-						<th>Bobot Nilai</th>
-					</tr>
-				</thead>
-				<tbody>
-		';
-		$bobot = [
-			'0'		=> 5,
-			'1' 	=> 4.5,
-			'-1'	=> 4,
-			'2'		=> 3.5,
-			'-2'	=> 3,
-			'3'		=> 2.5,
-			'-3'	=> 2,
-			'4'		=> 1.5,
-			'-4'	=> 1
-		];
-		foreach ($profil_jabatan as $key => $val)
-		{
-			$gap = $this->gap_analysis_m->gap($nilai_karyawan[$key]->nilai, $val);
-			echo '<tr>';
-			echo '<td>KI0' . $key . '</td>';
-			echo '<td>' . $nilai_karyawan[$key]->nilai . '</td>';
-			echo '<td>' . $val . '</td>';
-			echo '<td>' . $gap . '</td>';
-			echo '<td>' . $bobot[(string)$gap] . '</td>';
-			echo '</tr>';
-		}
-		echo '</tbody></table>';
-
-		$ncf = $this->gap_analysis_m->factor(1, 1, 4, 1, 1, 1);
-		$nsf = $this->gap_analysis_m->factor(1, 1, 4, 2, 1, 1);
-		$aspect_ki = $this->gap_analysis_m->aspect($ncf, $nsf);
-		echo '<h1>Factor KI</h1>';
-		echo "<p>Core factor: " . $ncf. "</p>";
-		echo "<p>Secondary factor: " . $nsf . "</p>";
-		echo "<p>Aspect value: " . $aspect_ki . "</p>";
-
-		$ncf = $this->gap_analysis_m->factor(1, 1, 5, 1, 1, 1);
-		$nsf = $this->gap_analysis_m->factor(1, 1, 5, 2, 1, 1);
-		$aspect_kp = $this->gap_analysis_m->aspect($ncf, $nsf);
-		echo '<h1>Factor KP</h1>';
-		echo "<p>Core factor: " . $ncf. "</p>";
-		echo "<p>Secondary factor: " . $nsf . "</p>";
-		echo "<p>Aspect value: " . $aspect_kp . "</p>";
-
-		$ncf = $this->gap_analysis_m->factor(1, 1, 6, 1, 1, 1);
-		$nsf = $this->gap_analysis_m->factor(1, 1, 6, 2, 1, 1);
-		$aspect_kf = $this->gap_analysis_m->aspect($ncf, $nsf);
-		echo '<h1>Factor KF</h1>';
-		echo "<p>Core factor: " . $ncf. "</p>";
-		echo "<p>Secondary factor: " . $nsf . "</p>";
-		echo "<p>Aspect value: " . $aspect_kf . "</p>";
-
-		echo '<h3>Performance: ' . $this->gap_analysis_m->performance($aspect_ki, $aspect_kp, $aspect_kf) . '</h3>';
+		
 	}
 
 	public function penilaian()
@@ -117,11 +46,11 @@ class Manajer extends MY_Controller
 		$this->load->model('departemen_m');
 		$this->load->model('jabatan_m');
 		$this->load->model('nilai_m');
+		$this->load->model('acc_penilaian_m');
+		$this->load->model('hasil_penilaian_m');
 
 		if ($this->POST('validasi') && $this->POST('id_karyawan'))
 		{
-			$this->load->model('acc_penilaian_m');
-			$this->load->model('hasil_penilaian_m');
 			$check_hasil = $this->hasil_penilaian_m->get_row(['id_penilaian' => $this->data['id_penilaian'], 'id_karyawan' => $this->POST('id_karyawan')]);
 			$response['error'] = FALSE;
 			if ($check_hasil)
@@ -130,20 +59,42 @@ class Manajer extends MY_Controller
 				if ($check_validasi)
 				{
 					$this->data['entri_acc'] = [
-						'validasi_hrd'			=> $check_validasi->validasi_hrd ? 0 : 1,
-						'validasi_dept_manajer'	=> $check_validasi->validasi_dept_manajer,
+						'validasi_hrd'			=> $this->data['id_departemen'] == 2 && $this->data['id_jabatan'] != 2 ? ($check_validasi->validasi_hrd ? 0 : 1) : $check_validasi->validasi_hrd,
+						'validasi_dept_manajer'	=> ($this->data['id_jabatan'] == 2 && $this->data['id_departemen'] == 2) || $this->data['id_jabatan'] == 2 ? ($check_validasi->validasi_dept_manajer ? 0 : 1) : $check_validasi->validasi_dept_manajer,
 						'validasi_pimpinan'		=> $check_validasi->validasi_pimpinan,
 						'status_acc'			=> !$check_validasi->validasi_hrd && $check_validasi->validasi_dept_manajer && $check_validasi->validasi_pimpinan ? 'Valid' : 'Tidak valid',
 						'tgl_acc'				=> date('Y-m-d')
 					];
+					if ($this->data['entri_acc']['validasi_pimpinan'] && $this->data['entri_acc']['validasi_hrd'] && $this->data['entri_acc']['validasi_dept_manajer'])
+					{
+						$this->data['entri_acc']['status_acc'] = 'Valid'; 
+					}
+					else
+					{
+						$this->data['entri_acc']['status_acc'] = 'Tidak valid';	
+					}
 					$this->acc_penilaian_m->update($check_validasi->id_hasil, $this->data['entri_acc']);
+					$state = FALSE;
+					if ($this->data['id_departemen'] == 2 && $this->data['id_jabatan'] == 2)
+					{
+						$state = $this->data['entri_acc']['validasi_dept_manajer'];
+					}
+					else if ($this->data['id_departemen'] == 2)
+					{
+						$state = $this->data['entri_acc']['validasi_hrd'];
+					}
+					else if ($this->data['id_jabatan'] == 2)
+					{
+						$state = $this->data['entri_acc']['validasi_dept_manajer'];
+					}
+					$response['result'] = '<button class="btn btn-' . ($state ? 'success' : 'danger') . ' btn-sm" onclick="acc_penilaian(' . $this->POST('id_karyawan') . ');"><i class="fa fa-' . ($state ? 'check' : 'times') . '"></i> ' . ($state ? 'Valid' : 'Tidak valid') . '</button>';
 				}
 				else
 				{
 					$this->data['entri_acc'] = [
 						'id_hasil'				=> $check_hasil->id_hasil,
-						'validasi_hrd'			=> 1,
-						'validasi_dept_manajer'	=> 0,
+						'validasi_hrd'			=> 0,
+						'validasi_dept_manajer'	=> 1,
 						'validasi_pimpinan'		=> 0,
 						'status_acc'			=> 'Tidak valid',
 						'tgl_acc'				=> date('Y-m-d')
@@ -161,7 +112,7 @@ class Manajer extends MY_Controller
 			exit;
 		}
 
-		$this->data['karyawan'] = $this->karyawan_m->get(['id_departemen' => 1]);
+		$this->data['karyawan'] = $this->data['id_departemen'] != 2 ? $this->karyawan_m->get(['id_departemen' => $this->data['id_departemen']]) : $this->karyawan_m->get();
 		$this->data['title'] 	= 'Data Penilaian';
 		$this->data['content'] 	= 'manajer/penilaian';
 		$this->template($this->data);
@@ -169,6 +120,12 @@ class Manajer extends MY_Controller
 
 	public function input_penilaian()
 	{
+		if ($this->data['id_departemen'] != 2) 
+		{
+			redirect('manajer');
+			exit;
+		}
+
 		if ($this->POST('submit'))
 		{
 			$this->data['entri_penilaian'] = [
@@ -215,6 +172,12 @@ class Manajer extends MY_Controller
 
 	public function input_kriteria()
 	{
+		if ($this->data['id_departemen'] != 2) 
+		{
+			redirect('manajer');
+			exit;
+		}
+
 		$this->load->model('jabatan_m');
 		$this->load->model('kelompok_nilai_m');
 
@@ -286,6 +249,12 @@ class Manajer extends MY_Controller
 
 	public function input_nilai_karyawan()
 	{
+		if ($this->data['id_jabatan'] != 2) 
+		{
+			redirect('manajer');
+			exit;
+		}
+
 		$this->data['id_karyawan'] 	= $this->GET('id_karyawan');
 		$this->data['id_penilaian']	= $this->GET('id_penilaian');
 		if (!isset($this->data['id_karyawan']) or !isset($this->data['id_penilaian']))
@@ -414,6 +383,57 @@ class Manajer extends MY_Controller
 
 		$this->data['title']	= 'Input Nilai Karyawan';
 		$this->data['content']	= 'manajer/input_nilai_karyawan';
+		$this->template($this->data);
+	}
+
+	public function detail_nilai()
+	{
+		$this->data['id_penilaian'] = $this->GET('id_penilaian');
+		$this->data['id_karyawan']	= $this->GET('id_karyawan');
+
+		if (!isset($this->data['id_penilaian'], $this->data['id_karyawan']))
+		{
+			redirect('manajer');
+			exit;
+		}
+
+		$this->load->model('karyawan_m');
+		$this->load->model('hasil_penilaian_m');
+		$this->load->model('acc_penilaian_m');
+		$this->load->model('subkriteria_m');
+		$this->load->model('nilai_m');
+		$this->load->model('penilaian_m');
+		$this->load->model('kelompok_nilai_m');
+		$this->load->model('kriteria_m');
+		$this->load->model('jenis_kriteria_m');
+		$this->load->model('gap_analysis_m');
+
+		$this->data['penilaian'] = $this->penilaian_m->get_row(['id_penilaian' => $this->data['id_penilaian']]);
+		if (!isset($this->data['penilaian']))
+		{
+			redirect('manajer');
+			exit;
+		}
+
+		$this->data['karyawan'] = $this->karyawan_m->get_row(['id_karyawan' => $this->data['id_karyawan']]);
+		if (!isset($this->data['karyawan']))
+		{
+			redirect('manajer');
+			exit;
+		}
+
+		$this->data['hasil_penilaian'] = $this->hasil_penilaian_m->get_row([
+			'id_penilaian'	=> $this->data['id_penilaian'],
+			'id_karyawan'	=> $this->data['id_karyawan']
+		]);
+		if (!isset($this->data['hasil_penilaian']))
+		{
+			redirect('manajer');
+			exit;
+		}
+
+		$this->data['title']	= 'Detail Nilai';
+		$this->data['content']	= 'karyawan/detail_nilai';
 		$this->template($this->data);
 	}
 }
