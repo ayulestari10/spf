@@ -42,7 +42,7 @@
                             <td><b>Jabatan</b></td>
                             <td>
                                 <?php  
-                                    $jabatan = $this->jabatan_m->get_row(['id_departemen' => $karyawan->id_jabatan]);
+                                    $jabatan = $this->jabatan_m->get_row(['id_jabatan' => $karyawan->id_jabatan]);
                                     if (isset($jabatan))
                                     {
                                         echo $jabatan->nama;
@@ -101,9 +101,15 @@
                     </div>
                 </div>
                 <div class="row">
+                    <?php if (count($kriteria) > 0): ?>
                     <div class="col-md-8 col-md-offset-1">
                         <input type="submit" name="submit" class="btn btn-success" value="Submit">
                     </div>
+                    <?php else: ?>
+                    <div class="col-md-8 col-md-offset-1">
+                        <?= 'Departemen ' . $departemen->nama . ' dengan jabatan ' . $jabatan->nama . ' belum memiliki kriteria penilaian. Silahkan buat kriteria penilaiannya terlebih dahulu' ?>
+                    </div>
+                    <?php endif ?>
                 </div>
                 <!-- /.row -->
             <?= form_close() ?>      

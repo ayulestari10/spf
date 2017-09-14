@@ -2,10 +2,10 @@
                 <section class="content-header">
                     <h1>
                         Dashboard
-                        <small>Karyawan Panel</small>
+                        <small>Manajer Panel</small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="<?= base_url('karyawan') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li><a href="<?= base_url('manajer') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
                         <li class="active">Dashboard</li>
                     </ol>
                 </section>
@@ -17,17 +17,19 @@
                     <div class="row">
                         <div class="col-lg-3 col-xs-6">
                             <!-- small box -->
-                            <div class="small-box bg-aqua">
+                            <div class="small-box bg-green">
                                 <div class="inner">
-                                    <h3><?= count($daftar_penilaian) ?></h3>
+                                    <h3>
+                                        <?= count($penilaian) ?> <!-- <sup style="font-size: 20px">%</sup> -->
+                                    </h3>
                                     <p>
-                                        Daftar Penilaian
+                                        Beri Nilai Karyawan
                                     </p>
                                 </div>
                                 <div class="icon">
-                                    <i class="fa fa-book"></i>
+                                    <i class="fa fa-user"></i>
                                 </div>
-                                <a href="<?= base_url('karyawan/daftar-penilaian') ?>" class="small-box-footer">
+                                <a href="<?= base_url('manajer/penilaian') ?>" class="small-box-footer">
                                     Selengkapnya <i class="fa fa-arrow-circle-right"></i>
                                 </a>
                             </div>
@@ -37,17 +39,32 @@
                             <!-- small box -->
                             <div class="small-box bg-green">
                                 <div class="inner">
-                                    <h3>
-                                        <?= count($penilaian) ?> <!-- <sup style="font-size: 20px">%</sup> -->
-                                    </h3>
+                                    <h3>-</h3>
                                     <p>
-                                        Penilaian Karyawan
+                                        Input Penilaian
                                     </p>
                                 </div>
                                 <div class="icon">
-                                    <i class="fa fa-user"></i>
+                                    <i class="fa fa-book"></i>
                                 </div>
-                                <a href="<?= base_url('karyawan/penilaian') ?>" class="small-box-footer">
+                                <a href="<?= base_url('manajer/input-penilaian') ?>" class="small-box-footer">
+                                    Selengkapnya <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div><!-- ./col -->
+                        <div class="col-lg-3 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>-</h3>
+                                    <p>
+                                        Input Kriteria Penilaian
+                                    </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-book"></i>
+                                </div>
+                                <a href="<?= base_url('manajer/input-kriteria') ?>" class="small-box-footer">
                                     Selengkapnya <i class="fa fa-arrow-circle-right"></i>
                                 </a>
                             </div>

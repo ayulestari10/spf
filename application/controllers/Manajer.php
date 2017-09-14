@@ -20,7 +20,11 @@ class Manajer extends MY_Controller
 
 	public function index()
 	{
-		
+		$this->load->model('penilaian_m');
+	    $this->data['title'] 			= 'Dashboard Manajer';
+	    $this->data['content']			= 'manajer/dashboard';
+	    $this->data['penilaian']		= $this->penilaian_m->get_by_order('tgl_penilaian', 'DESC');
+	    $this->template($this->data);
 	}
 
 	public function penilaian()

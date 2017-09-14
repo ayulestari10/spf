@@ -8,7 +8,7 @@ class Karyawan extends MY_Controller
 
 	private $data = [];
 
-  	function __construct()
+  	public function __construct()
 	{
 	    parent::__construct();		
 		$this->data['username'] = $this->session->userdata('username');
@@ -29,81 +29,89 @@ class Karyawan extends MY_Controller
 
 		$this->load->model('Hasil_penilaian_m');
 		$this->load->model('Karyawan_m');
+
+		$this->data['user'] = $this->Karyawan_m->get_row(['username' => $this->data['username']]);
+		if (!isset($this->data['user']))
+		{
+			redirect('logout');
+			exit;
+		}
   	}
 
   	public function index()
   	{
-	    $this->data['title'] 	= 'Dashboard Karyawan';
-	    $this->data['content']	= 'karyawan/dashboard';
-	    $this->data['karyawan']	= $this->Karyawan_m->get();
-	    $this->data['hasil_penelitian']	= $this->Hasil_penilaian_m->get();
+  		$this->load->model('penilaian_m');
+	    $this->data['title'] 			= 'Dashboard Karyawan';
+	    $this->data['content']			= 'karyawan/dashboard';
+	    $this->data['daftar_penilaian']	= $this->penilaian_m->get_by_order('id_penilaian', 'DESC');
+	    $this->data['penilaian']		= $this->penilaian_m->get_by_order('tgl_penilaian', 'DESC');
 	    $this->template($this->data);
 	}
 
-	public function data_karyawan()
-	{
-		if ($this->POST('get') && $this->POST('id_karyawan'))
-		{
-			$this->data['karyawan'] = $this->Karyawan_m->get_row(['id_karyawan' => $this->POST('id_karyawan')]);
-			echo json_encode($this->data['karyawan']);
-			exit;
-		}
+	// public function data_karyawan()
+	// {
+	// 	if ($this->POST('get') && $this->POST('id_karyawan'))
+	// 	{
+	// 		$this->data['karyawan'] = $this->Karyawan_m->get_row(['id_karyawan' => $this->POST('id_karyawan')]);
+	// 		echo json_encode($this->data['karyawan']);
+	// 		exit;
+	// 	}
 				
-		$this->data['data']		= $this->Karyawan_m->get();
-		$this->data['columns']	= ["id_karyawan","id_departemen","id_jabatan","NIK","nama","tempat_lahir","tgl_lahir","jenis_kelamin","agama","alamat","pendidikan",];
-		$this->data['title'] 	= 'Data Karyawan';
-		$this->data['content'] 	= 'karyawan/karyawan_all';
-		$this->template($this->data);
-	}
+	// 	$this->data['data']		= $this->Karyawan_m->get();
+	// 	$this->data['columns']	= ["id_karyawan","id_departemen","id_jabatan","NIK","nama","tempat_lahir","tgl_lahir","jenis_kelamin","agama","alamat","pendidikan",];
+	// 	$this->data['title'] 	= 'Data Karyawan';
+	// 	$this->data['content'] 	= 'karyawan/karyawan_all';
+	// 	$this->template($this->data);
+	// }
 
 
-	public function detail_karyawan()
-	{
-		$this->data['id_karyawan'] = $this->uri->segment(3);
-		if (!isset($this->data['id_karyawan']))
-		{
-			redirect('admin/karyawan');
-			exit;
-		}
+	// public function detail_karyawan()
+	// {
+	// 	$this->data['id_karyawan'] = $this->uri->segment(3);
+	// 	if (!isset($this->data['id_karyawan']))
+	// 	{
+	// 		redirect('admin/karyawan');
+	// 		exit;
+	// 	}
 
-		$this->data['columns']	= ["id_karyawan","id_departemen","id_jabatan","NIK","nama","tempat_lahir","tgl_lahir","jenis_kelamin","agama","alamat","pendidikan",];
-		$this->data['data'] = $this->Karyawan_m->get_row(['id_karyawan' => $this->data['id_karyawan']]);
-		$this->data['title'] 	= 'Detail Karyawan';
-		$this->data['content'] 	= 'karyawan/karyawan_detail';
-		$this->template($this->data);
-	}
+	// 	$this->data['columns']	= ["id_karyawan","id_departemen","id_jabatan","NIK","nama","tempat_lahir","tgl_lahir","jenis_kelamin","agama","alamat","pendidikan",];
+	// 	$this->data['data'] = $this->Karyawan_m->get_row(['id_karyawan' => $this->data['id_karyawan']]);
+	// 	$this->data['title'] 	= 'Detail Karyawan';
+	// 	$this->data['content'] 	= 'karyawan/karyawan_detail';
+	// 	$this->template($this->data);
+	// }
 
-	public function hasil_penilaian()
-  	{
-  		if ($this->POST('get') && $this->POST('id_hasil'))
-		{
-			$this->data['hasil_penilaian'] = $this->Hasil_penilaian_m->get_row(['id_hasil' => $this->POST('id_hasil')]);
-			echo json_encode($this->data['hasil_penilaian']);
-			exit;
-		}
+	// public function hasil_penilaian()
+ //  	{
+ //  		if ($this->POST('get') && $this->POST('id_hasil'))
+	// 	{
+	// 		$this->data['hasil_penilaian'] = $this->Hasil_penilaian_m->get_row(['id_hasil' => $this->POST('id_hasil')]);
+	// 		echo json_encode($this->data['hasil_penilaian']);
+	// 		exit;
+	// 	}
 
-	    $this->data['title'] 	= 'Hasil Penilaian';
-	    $this->data['content']	= 'karyawan/hasil_penilaian';
-	    $this->data['data']		= $this->Hasil_penilaian_m->get();
-		$this->data['columns']	= ["id_hasil","id_penilaian","gap","bobot_nilai","core_factor","secondary_factor","total_nilai","hasil_akhir",];
-	    $this->template($this->data);
-	}
+	//     $this->data['title'] 	= 'Hasil Penilaian';
+	//     $this->data['content']	= 'karyawan/hasil_penilaian';
+	//     $this->data['data']		= $this->Hasil_penilaian_m->get();
+	// 	$this->data['columns']	= ["id_hasil","id_penilaian","gap","bobot_nilai","core_factor","secondary_factor","total_nilai","hasil_akhir",];
+	//     $this->template($this->data);
+	// }
 
-	public function detail_hasil_penilaian()
-	{
-		$this->data['id_hasil'] = $this->uri->segment(3);
-		if (!isset($this->data['id_hasil']))
-		{
-			redirect('admin/hasil_penilaian');
-			exit;
-		}
+	// public function detail_hasil_penilaian()
+	// {
+	// 	$this->data['id_hasil'] = $this->uri->segment(3);
+	// 	if (!isset($this->data['id_hasil']))
+	// 	{
+	// 		redirect('admin/hasil_penilaian');
+	// 		exit;
+	// 	}
 
-		$this->data['columns']	= ["id_hasil","id_penilaian","gap","bobot_nilai","core_factor","secondary_factor","total_nilai","hasil_akhir",];
-		$this->data['data'] = $this->Hasil_penilaian_m->get_row(['id_hasil' => $this->data['id_hasil']]);
-		$this->data['title'] 	= 'Detail Hasil Penelitian';
-		$this->data['content'] 	= 'admin/hasil_penilaian_detail';
-		$this->template($this->data);
-	}
+	// 	$this->data['columns']	= ["id_hasil","id_penilaian","gap","bobot_nilai","core_factor","secondary_factor","total_nilai","hasil_akhir",];
+	// 	$this->data['data'] = $this->Hasil_penilaian_m->get_row(['id_hasil' => $this->data['id_hasil']]);
+	// 	$this->data['title'] 	= 'Detail Hasil Penelitian';
+	// 	$this->data['content'] 	= 'admin/hasil_penilaian_detail';
+	// 	$this->template($this->data);
+	// }
 
 	public function penilaian()
 	{
@@ -214,6 +222,12 @@ class Karyawan extends MY_Controller
 
 	public function detail_nilai()
 	{
+		if ($this->data['id_departemen'] != 2)
+		{
+			redirect('karyawan');
+			exit;
+		}
+
 		$this->data['id_penilaian'] = $this->GET('id_penilaian');
 		$this->data['id_karyawan']	= $this->GET('id_karyawan');
 
@@ -260,6 +274,67 @@ class Karyawan extends MY_Controller
 
 		$this->data['title']	= 'Detail Nilai';
 		$this->data['content']	= 'karyawan/detail_nilai';
+		$this->template($this->data);
+	}
+
+	public function daftar_penilaian()
+	{
+		$this->load->model('penilaian_m');
+		$this->load->model('hasil_penilaian_m');
+		$this->data['penilaian']	= $this->penilaian_m->get_by_order('tgl_penilaian', 'DESC');
+		$this->data['title']		= 'Daftar Penilaian';
+		$this->data['content']		= 'karyawan/daftar_penilaian';
+		$this->template($this->data);	
+	}
+
+	public function hasil_akhir_penilaian()
+	{
+		$this->data['id_penilaian'] = $this->GET('id_penilaian');
+
+		if (!isset($this->data['id_penilaian']))
+		{
+			redirect('karyawan');
+			exit;
+		}
+
+		$this->load->model('karyawan_m');
+		$this->load->model('hasil_penilaian_m');
+		$this->load->model('acc_penilaian_m');
+		$this->load->model('subkriteria_m');
+		$this->load->model('nilai_m');
+		$this->load->model('penilaian_m');
+		$this->load->model('kelompok_nilai_m');
+		$this->load->model('kriteria_m');
+		$this->load->model('jenis_kriteria_m');
+		$this->load->model('gap_analysis_m');
+
+		$this->data['penilaian'] = $this->penilaian_m->get_row(['id_penilaian' => $this->data['id_penilaian']]);
+		if (!isset($this->data['penilaian']))
+		{
+			redirect('karyawan');
+			exit;
+		}
+
+		$this->data['karyawan'] = $this->karyawan_m->get_row(['id_karyawan' => $this->data['user']->id_karyawan]);
+		if (!isset($this->data['karyawan']))
+		{
+			redirect('karyawan');
+			exit;
+		}
+
+		$this->data['hasil_penilaian'] = $this->hasil_penilaian_m->get_row([
+			'id_penilaian'	=> $this->data['id_penilaian'],
+			'id_karyawan'	=> $this->data['user']->id_karyawan
+		]);
+		if (!isset($this->data['hasil_penilaian']))
+		{
+			redirect('manajer');
+			exit;
+		}
+
+		$this->data['id_karyawan']	= $this->data['user']->id_karyawan;
+		$this->data['title']		= 'Detail Nilai';
+		$this->data['content']		= 'karyawan/detail_nilai';
 		$this->template($this->data);
 	}
 }
