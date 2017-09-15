@@ -9,9 +9,11 @@ class Hasil_penilaian_m extends MY_Model
 		$this->data['primary_key'] = 'id_hasil';
 	}
 
-	public function get_rank()
+	public function get_rank($id_penilaian)
 	{
-		// TODO: mengurutkan hasil akhir karyawan dari yang tertinggi - terendah
+		$this->db->query('SET @rank:=0;');
+		$query = $this->db->query('SELECT * FROM (SELECT *, @rank := @rank + 1 AS rank FROM hasil_penilaian WHERE id_penilaian=' . $id_penilaian . ' ORDER BY hasil_akhir DESC) x');
+		return $query->result();
 	}
 }
 

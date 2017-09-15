@@ -107,7 +107,7 @@ class Direktur extends MY_Controller
 
 		$this->data['karyawan'] = $this->data['id_departemen'] != 2 && $this->data['id_jabatan'] != 3 ? $this->karyawan_m->get(['id_departemen' => $this->data['id_departemen']]) : $this->karyawan_m->get();
 		$this->data['title'] 	= 'Data Penilaian';
-		$this->data['content'] 	= 'manajer/penilaian';
+		$this->data['content'] 	= 'direktur/penilaian';
 		$this->template($this->data);
 	}
 
@@ -160,5 +160,23 @@ class Direktur extends MY_Controller
 		$this->data['title']	= 'Detail Nilai';
 		$this->data['content']	= 'karyawan/detail_nilai';
 		$this->template($this->data);
+	}
+
+	public function unduh_laporan()
+	{
+		$this->data['id_penilaian'] = $this->GET('id_penilaian');
+		if (!isset($this->data['id_penilaian']))
+		{
+			redirect('direktur');
+			exit;
+		}
+
+		$this->load->model('hasil_penilaian_m');
+		$this->data['karyawan'] = $this->hasil_penilaian_m->get_rank($this->data['id_penilaian']);
+		$html = $this->load->view('direktur/laporan', $this->data, true);
+    	$pdfFilePath = 'Laporan Penilaian.pdf';
+    	$this->load->library('m_pdf');
+    	$this->m_pdf->pdf->WriteHTML($html);
+    	$this->m_pdf->pdf->Output($pdfFilePath, "D");
 	}
 }

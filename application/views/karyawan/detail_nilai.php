@@ -23,6 +23,7 @@
                             </style>
                             <?php  
                                 $jenis_kriteria = $this->jenis_kriteria_m->get();
+                                $gap_subkriteria = [];
                                 foreach ($jenis_kriteria as $jk):
                             ?>
                             <h3><?= $jk->nama_kriteria ?></h3>
@@ -53,7 +54,21 @@
                                         <td><?= $subkriteria->nama ?></td>
                                         <td><?= $subkriteria->standar_nilai ?></td>
                                         <td><?= $row->nilai ?></td>
-                                        <td><?= $row->nilai - $subkriteria->standar_nilai ?></td>
+                                        <td>
+                                            <?php 
+                                                $gap = $row->nilai - $subkriteria->standar_nilai; 
+                                                echo $gap;
+                                                if ($gap < 0)
+                                                {
+                                                    $gap *= -1;
+                                                    $percentage = (float)$gap/(float)$subkriteria->standar_nilai * 100;
+                                                    if ($percentage > 50)
+                                                    {
+                                                        $gap_subkriteria []= $subkriteria->nama;
+                                                    }
+                                                }
+                                            ?>
+                                        </td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -83,6 +98,13 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <h4>Subkriteria yang direkomendasikan untuk diikuti pelatihan</h4>
+                            <?php if (count($gap_subkriteria) <= 0): ?>
+                                <p>Tidak ada</p>
+                            <?php endif; ?>
+                            <?php foreach ($gap_subkriteria as $row): ?>
+                                <p><?= $row ?></p>
+                            <?php endforeach; ?>
                         </div>
                         <!-- /.panel-body -->
                     </div>
