@@ -10,7 +10,7 @@ class Direktur extends MY_Controller
 		$this->data['id_departemen'] 	= $this->session->userdata('id_departemen');
 		$this->data['id_jabatan']		= $this->session->userdata('id_jabatan');
 
-		if ($this->data['id_jabatan'] != 3)
+		if ($this->data['id_jabatan'] != 4)
 		{
 			redirect('logout');
 			$this->flashmsg('Anda tidak diizinkan untuk mengakses halaman ini','danger');
@@ -25,7 +25,7 @@ class Direktur extends MY_Controller
 		$this->load->model('penilaian_m');
 		$this->data['penilaian']	= $this->penilaian_m->get_by_order('tgl_penilaian', 'DESC');
 		$this->data['title']		= 'Penilaian';
-		$this->data['content']		= 'manajer/daftar_penilaian';
+		$this->data['content']		= 'direktur/daftar_penilaian';
 		$this->template($this->data);
 	}
 
@@ -58,7 +58,7 @@ class Direktur extends MY_Controller
 					$this->data['entri_acc'] = [
 						'validasi_hrd'			=> $this->data['id_departemen'] == 2 && $this->data['id_jabatan'] != 2 ? ($check_validasi->validasi_hrd ? 0 : 1) : $check_validasi->validasi_hrd,
 						'validasi_dept_manajer'	=> ($this->data['id_jabatan'] == 2 && $this->data['id_departemen'] == 2) || $this->data['id_jabatan'] == 2 ? ($check_validasi->validasi_dept_manajer ? 0 : 1) : $check_validasi->validasi_dept_manajer,
-						'validasi_pimpinan'		=> $this->data['id_jabatan'] == 3 ? ($check_validasi->validasi_pimpinan ? 0 : 1) : $check_validasi->validasi_pimpinan,
+						'validasi_pimpinan'		=> $this->data['id_jabatan'] == 4 ? ($check_validasi->validasi_pimpinan ? 0 : 1) : $check_validasi->validasi_pimpinan,
 						'status_acc'			=> $check_validasi->validasi_hrd && $check_validasi->validasi_dept_manajer && !$check_validasi->validasi_pimpinan ? 'Valid' : 'Tidak valid',
 						'tgl_acc'				=> date('Y-m-d')
 					];
@@ -76,7 +76,7 @@ class Direktur extends MY_Controller
 					{
 						$state = $this->data['entri_acc']['validasi_dept_manajer'];
 					}
-					else if ($this->data['id_jabatan'] == 3)
+					else if ($this->data['id_jabatan'] == 4)
 					{
 						$state = $this->data['entri_acc']['validasi_pimpinan'];
 					}
@@ -105,7 +105,7 @@ class Direktur extends MY_Controller
 			exit;
 		}
 
-		$this->data['karyawan'] = $this->data['id_departemen'] != 2 && $this->data['id_jabatan'] != 3 ? $this->karyawan_m->get(['id_departemen' => $this->data['id_departemen']]) : $this->karyawan_m->get();
+		$this->data['karyawan'] = $this->karyawan_m->get('id_jabatan = 1 OR id_jabatan = 3');
 		$this->data['title'] 	= 'Data Penilaian';
 		$this->data['content'] 	= 'direktur/penilaian';
 		$this->template($this->data);
@@ -118,6 +118,7 @@ class Direktur extends MY_Controller
 
 		if (!isset($this->data['id_penilaian'], $this->data['id_karyawan']))
 		{
+			$this->flashmsg('<i class="fa fa-warning"></i> Parameter tidak lengkap', 'danger');
 			redirect('direktur');
 			exit;
 		}
@@ -136,6 +137,7 @@ class Direktur extends MY_Controller
 		$this->data['penilaian'] = $this->penilaian_m->get_row(['id_penilaian' => $this->data['id_penilaian']]);
 		if (!isset($this->data['penilaian']))
 		{
+			$this->flashmsg('<i class="fa fa-info"></i> Data penilaian tidak ditemukan', 'info');
 			redirect('direktur');
 			exit;
 		}
@@ -143,6 +145,7 @@ class Direktur extends MY_Controller
 		$this->data['karyawan'] = $this->karyawan_m->get_row(['id_karyawan' => $this->data['id_karyawan']]);
 		if (!isset($this->data['karyawan']))
 		{
+			$this->flashmsg('<i class="fa fa-info"></i> Data karyawan tidak ditemukan', 'info');
 			redirect('direktur');
 			exit;
 		}
@@ -153,6 +156,7 @@ class Direktur extends MY_Controller
 		]);
 		if (!isset($this->data['hasil_penilaian']))
 		{
+			$this->flashmsg('<i class="fa fa-info"></i> Karyawan tersebut belum memiliki penilaian', 'info');
 			redirect('direktur');
 			exit;
 		}

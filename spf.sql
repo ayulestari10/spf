@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2017 at 12:37 PM
+-- Generation Time: Sep 28, 2017 at 06:27 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -40,8 +40,8 @@ CREATE TABLE `acc_penilaian` (
 --
 
 INSERT INTO `acc_penilaian` (`id_hasil`, `validasi_hrd`, `validasi_dept_manajer`, `validasi_pimpinan`, `status_acc`, `tgl_acc`) VALUES
-(1, 1, 1, 0, 'Tidak valid', '2017-09-12'),
-(2, 0, 1, 0, 'Tidak valid', '2017-09-24');
+(1, 0, 1, 1, 'Tidak valid', '2017-09-28'),
+(2, 0, 1, 0, 'Tidak valid', '2017-09-28');
 
 -- --------------------------------------------------------
 
@@ -51,7 +51,6 @@ INSERT INTO `acc_penilaian` (`id_hasil`, `validasi_hrd`, `validasi_dept_manajer`
 
 CREATE TABLE `bobot_gap` (
   `id_bobot` int(11) NOT NULL,
-  `id_penilaian` int(11) NOT NULL,
   `selisih` int(11) NOT NULL,
   `bobot_nilai` float NOT NULL,
   `keterangan` text NOT NULL
@@ -61,23 +60,16 @@ CREATE TABLE `bobot_gap` (
 -- Dumping data for table `bobot_gap`
 --
 
-INSERT INTO `bobot_gap` (`id_bobot`, `id_penilaian`, `selisih`, `bobot_nilai`, `keterangan`) VALUES
-(1, 1, 0, 5, 'Tidak ada selisih(kompetensi sesuai dengan yang dibutuhkan)'),
-(2, 1, 1, 4.5, 'Kompetensi kelebihan 1 tingkat/level'),
-(3, 1, -1, 4, 'Kompetensi kekurangan 1 tingkat/level'),
-(4, 1, 2, 3.5, 'Kompetensi kelebihan 2 tingkat/level'),
-(5, 1, -2, 3, 'Kompetensi kekurangan 2 tingkat/level'),
-(6, 1, 3, 2.5, 'Kompetensi kelebihan 3 tingkat/level'),
-(7, 1, -3, 2, 'Kompetensi kekurangan 3 tingkat/level'),
-(8, 1, 4, 1.5, 'Kompetensi kelebihan 4 tingkat/level'),
-(9, 1, -4, 1, 'Kompetensi individu kekurangan 4 tingkat/level'),
-(10, 2, 5, 2, 'asdasd'),
-(13, 3, 5, 3, 'ewrwe'),
-(15, 3, 43, 4, ''),
-(16, 4, 23, 2, 'ewrwer'),
-(18, 4, 3, 5.4, ''),
-(19, 5, 4353, 32, 'feertre'),
-(20, 5, 3, 4, '');
+INSERT INTO `bobot_gap` (`id_bobot`, `selisih`, `bobot_nilai`, `keterangan`) VALUES
+(1, 0, 5, 'Tidak ada selisih (kompetensi sesuai dengan yang dibutuhkan)'),
+(2, 1, 4.5, 'Kompetensi kelebihan 1 tingkat/level'),
+(3, -1, 4, 'Kompetensi kekurangan 1 tingkat/level'),
+(4, 2, 3.5, 'Kompetensi kelebihan 2 tingkat/level'),
+(5, -2, 3, 'Kompetensi kekurangan 2 tingkat/level'),
+(6, 3, 2.5, 'Kompetensi kelebihan 3 tingkat/level'),
+(7, -3, 2, 'Kompetensi kekurangan 3 tingkat/level'),
+(8, 4, 1.5, 'Kompetensi kelebihan 4 tingkat/level'),
+(9, -4, 1, 'Kompetensi individu kekurangan 4 tingkat/level');
 
 -- --------------------------------------------------------
 
@@ -119,8 +111,8 @@ CREATE TABLE `hasil_penilaian` (
 --
 
 INSERT INTO `hasil_penilaian` (`id_hasil`, `id_penilaian`, `id_karyawan`, `kompetensi_inti`, `kompetensi_peran`, `kompetensi_fungsional`, `hasil_akhir`) VALUES
-(1, 1, 1, 4.46667, 4.3, 5, 4.47833),
-(2, 1, 3, 4.25, 3.6, 3, 3.9625);
+(1, 1, 4, 4.8, 4.3, 5, 4.695),
+(2, 2, 4, 4.53333, 4.6, 4.6, 4.55667);
 
 -- --------------------------------------------------------
 
@@ -130,7 +122,6 @@ INSERT INTO `hasil_penilaian` (`id_hasil`, `id_penilaian`, `id_karyawan`, `kompe
 
 CREATE TABLE `jabatan` (
   `id_jabatan` int(11) NOT NULL,
-  `id_departemen` int(11) NOT NULL,
   `nama` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -138,11 +129,11 @@ CREATE TABLE `jabatan` (
 -- Dumping data for table `jabatan`
 --
 
-INSERT INTO `jabatan` (`id_jabatan`, `id_departemen`, `nama`) VALUES
-(1, 1, 'Supervisor'),
-(2, 2, 'Manajer'),
-(3, 1, 'Direktur'),
-(4, 2, 'Supervisor');
+INSERT INTO `jabatan` (`id_jabatan`, `nama`) VALUES
+(1, 'Supervisor'),
+(2, 'Manajer'),
+(3, 'Foreman'),
+(4, 'Direktur');
 
 -- --------------------------------------------------------
 
@@ -192,10 +183,12 @@ CREATE TABLE `karyawan` (
 --
 
 INSERT INTO `karyawan` (`id_karyawan`, `id_departemen`, `id_jabatan`, `username`, `password`, `NIK`, `nama`, `tempat_lahir`, `tgl_lahir`, `jenis_kelamin`, `agama`, `alamat`, `pendidikan`) VALUES
-(1, 1, 2, 'azhary', '985fabf8f96dc1c4c306341031569937', 1, 'Azhary Arliansyah', 'Palembang', '1996-08-05', 'l', 'Islam', 'aaaaa', 'aaaa'),
-(2, 2, 2, 'arliansyah', '985fabf8f96dc1c4c306341031569937', 12345, 'Azhary Arliansyah', 'Palembang', '1996-08-05', 'l', 'Islam', 'Bougenville', 'SMA'),
-(3, 2, 4, 'az', '985fabf8f96dc1c4c306341031569937', 12, 'Azhary', 'asdsad', '2017-09-11', 'p', 'sdfds', 'dsfsd', 'fdgdfgdf'),
-(4, 1, 3, 'azh', '985fabf8f96dc1c4c306341031569937', 12, 'azharyarliansyah', 'asdasd', '2017-09-05', 'p', 'asddas', 'fsdf', 'dsfds');
+(1, 2, 2, 'manajer_hrd', '985fabf8f96dc1c4c306341031569937', 12345, 'Azhary Arliansyah', 'Palembang', '1996-08-05', 'l', 'Islam', '-', '-'),
+(2, 1, 2, 'manajer_finance', '985fabf8f96dc1c4c306341031569937', 123, 'Manajer Finance', 'Plg', '2017-09-11', 'p', 'Islam', 'sada', 'asd'),
+(3, 1, 3, 'karyawan_finance', '985fabf8f96dc1c4c306341031569937', 12, 'azzz', 'aaaaa', '2017-09-12', 'l', 'aaaa', '-', '-'),
+(4, 1, 1, 'supervisor_finance', '985fabf8f96dc1c4c306341031569937', 1234, 'azh', 'Plg', '2017-09-15', 'l', 'islm', 'almt', 'pnddkn'),
+(5, 1, 4, 'direktur', '985fabf8f96dc1c4c306341031569937', 123, 'aaa', 'a', '2017-09-12', 'p', 'aaa', 'aaa', 'aa'),
+(6, 2, 3, 'karyawan_hrd', '985fabf8f96dc1c4c306341031569937', 123, 'karyawan_hrd', '332', '2017-09-05', 'l', 'aaaAAAA', 'aaa\r\naaa', 'aaaa');
 
 -- --------------------------------------------------------
 
@@ -225,21 +218,20 @@ INSERT INTO `kelompok_nilai` (`id_kelompok_nilai`, `nama`) VALUES
 CREATE TABLE `kriteria` (
   `id_kriteria` int(11) NOT NULL,
   `id_jenis_kriteria` int(11) NOT NULL,
-  `id_departemen` int(11) NOT NULL,
-  `id_jabatan` int(11) NOT NULL
+  `id_departemen` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `kriteria`
 --
 
-INSERT INTO `kriteria` (`id_kriteria`, `id_jenis_kriteria`, `id_departemen`, `id_jabatan`) VALUES
-(1, 4, 1, 1),
-(2, 5, 1, 1),
-(3, 6, 1, 1),
-(4, 4, 2, 4),
-(5, 5, 2, 4),
-(6, 6, 2, 4);
+INSERT INTO `kriteria` (`id_kriteria`, `id_jenis_kriteria`, `id_departemen`) VALUES
+(1, 4, 2),
+(2, 5, 2),
+(3, 6, 2),
+(4, 4, 1),
+(5, 5, 1),
+(6, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -261,26 +253,32 @@ CREATE TABLE `nilai` (
 --
 
 INSERT INTO `nilai` (`id_nilai`, `id_penilaian`, `id_karyawan`, `id_jenis_kriteria`, `id_subkriteria`, `nilai`) VALUES
-(1, 1, 1, 4, 1, 5),
-(2, 1, 1, 4, 2, 3),
-(3, 1, 1, 4, 3, 3),
-(4, 1, 1, 4, 4, 4),
-(5, 1, 1, 4, 5, 3),
-(6, 1, 1, 4, 6, 2),
-(7, 1, 1, 4, 7, 2),
-(8, 1, 1, 4, 8, 2),
-(9, 1, 1, 4, 9, 3),
-(10, 1, 1, 5, 10, 2),
-(11, 1, 1, 5, 11, 4),
-(12, 1, 1, 6, 12, 3),
-(13, 1, 1, 6, 13, 3),
-(14, 1, 3, 4, 14, 5),
-(15, 1, 3, 4, 15, 4),
-(16, 1, 3, 4, 16, 6),
-(17, 1, 3, 5, 17, 3),
-(18, 1, 3, 5, 18, 2),
-(19, 1, 3, 6, 19, 3),
-(20, 1, 3, 6, 20, 1);
+(66, 1, 4, 4, 1, 2),
+(67, 1, 4, 4, 2, 3),
+(68, 1, 4, 4, 3, 3),
+(69, 1, 4, 4, 4, 4),
+(70, 1, 4, 4, 5, 3),
+(71, 1, 4, 4, 6, 2),
+(72, 1, 4, 4, 7, 2),
+(73, 1, 4, 4, 8, 2),
+(74, 1, 4, 4, 9, 3),
+(75, 1, 4, 5, 10, 2),
+(76, 1, 4, 5, 11, 4),
+(77, 1, 4, 6, 12, 3),
+(78, 1, 4, 6, 13, 3),
+(79, 2, 4, 4, 1, 3),
+(80, 2, 4, 4, 2, 2),
+(81, 2, 4, 4, 3, 3),
+(82, 2, 4, 4, 4, 2),
+(83, 2, 4, 4, 5, 3),
+(84, 2, 4, 4, 6, 2),
+(85, 2, 4, 4, 7, 3),
+(86, 2, 4, 4, 8, 2),
+(87, 2, 4, 4, 9, 3),
+(88, 2, 4, 5, 10, 2),
+(89, 2, 4, 5, 11, 3),
+(90, 2, 4, 6, 12, 2),
+(91, 2, 4, 6, 13, 3);
 
 -- --------------------------------------------------------
 
@@ -290,7 +288,6 @@ INSERT INTO `nilai` (`id_nilai`, `id_penilaian`, `id_karyawan`, `id_jenis_kriter
 
 CREATE TABLE `penilaian` (
   `id_penilaian` int(11) NOT NULL,
-  `standar_requirement` text NOT NULL,
   `tgl_penilaian` date NOT NULL,
   `thn_penilaian` varchar(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -299,12 +296,9 @@ CREATE TABLE `penilaian` (
 -- Dumping data for table `penilaian`
 --
 
-INSERT INTO `penilaian` (`id_penilaian`, `standar_requirement`, `tgl_penilaian`, `thn_penilaian`) VALUES
-(1, 'Standar Requirement', '2017-08-24', '2017'),
-(2, 'test', '2017-12-12', '2017'),
-(3, 'dsads', '2017-12-12', '2017'),
-(4, 'ewefdg', '2017-12-12', '2018'),
-(5, 'asdas', '2017-12-12', '2017');
+INSERT INTO `penilaian` (`id_penilaian`, `tgl_penilaian`, `thn_penilaian`) VALUES
+(1, '2017-09-05', '2017'),
+(2, '2017-07-07', '2017');
 
 -- --------------------------------------------------------
 
@@ -314,7 +308,9 @@ INSERT INTO `penilaian` (`id_penilaian`, `standar_requirement`, `tgl_penilaian`,
 
 CREATE TABLE `subkriteria` (
   `id_subkriteria` int(11) NOT NULL,
-  `id_kriteria` int(11) NOT NULL,
+  `id_departemen` int(11) NOT NULL,
+  `id_jabatan` int(11) NOT NULL,
+  `id_jenis_kriteria` int(11) NOT NULL,
   `id_kelompok_nilai` int(11) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `standar_nilai` int(11) NOT NULL
@@ -324,27 +320,20 @@ CREATE TABLE `subkriteria` (
 -- Dumping data for table `subkriteria`
 --
 
-INSERT INTO `subkriteria` (`id_subkriteria`, `id_kriteria`, `id_kelompok_nilai`, `nama`, `standar_nilai`) VALUES
-(1, 1, 2, 'Kreatif', 2),
-(2, 1, 1, 'Integritas & Kejujuran', 4),
-(3, 1, 1, 'Aktif Berkomunikasi', 3),
-(4, 1, 1, 'Tanggung Jawab', 4),
-(5, 1, 1, 'Disiplin', 3),
-(6, 1, 2, 'Respek & Saling Percaya', 2),
-(7, 1, 1, 'Inisiatif', 3),
-(8, 1, 2, 'Kerja Sama', 2),
-(9, 1, 1, 'Fokus ke Pelanggan', 3),
-(10, 2, 2, 'Managerial', 3),
-(11, 2, 1, 'Leadership', 3),
-(12, 3, 2, 'Financial Report', 3),
-(13, 3, 1, 'Managerial Report', 3),
-(14, 4, 1, 'Sub 1', 5),
-(15, 4, 1, 'Sub 2', 3),
-(16, 4, 2, 'Sub 3', 4),
-(17, 5, 1, 'Sub 1', 4),
-(18, 5, 2, 'Sub 2', 4),
-(19, 6, 1, 'Sub 1', 5),
-(20, 6, 2, 'Sub 2', 3);
+INSERT INTO `subkriteria` (`id_subkriteria`, `id_departemen`, `id_jabatan`, `id_jenis_kriteria`, `id_kelompok_nilai`, `nama`, `standar_nilai`) VALUES
+(1, 1, 1, 4, 2, 'Kreatif', 2),
+(2, 1, 1, 4, 1, 'Integritas & Kejujuran', 4),
+(3, 1, 1, 4, 1, 'Aktif Berkomunikasi', 3),
+(4, 1, 1, 4, 1, 'Tanggung Jawab', 4),
+(5, 1, 1, 4, 1, 'Disiplin', 3),
+(6, 1, 1, 4, 2, 'Respek & Saling Percaya', 2),
+(7, 1, 1, 4, 1, 'Inisiatif', 3),
+(8, 1, 1, 4, 2, 'Kerja Sama', 2),
+(9, 1, 1, 4, 1, 'Fokus ke Pelanggan', 3),
+(10, 1, 1, 5, 2, 'Managerial', 3),
+(11, 1, 1, 5, 1, 'Leadership', 3),
+(12, 1, 1, 6, 2, 'Financial Report', 3),
+(13, 1, 1, 6, 1, 'Managerial Report', 3);
 
 --
 -- Indexes for dumped tables
@@ -360,8 +349,7 @@ ALTER TABLE `acc_penilaian`
 -- Indexes for table `bobot_gap`
 --
 ALTER TABLE `bobot_gap`
-  ADD PRIMARY KEY (`id_bobot`),
-  ADD KEY `id_penilaian` (`id_penilaian`);
+  ADD PRIMARY KEY (`id_bobot`);
 
 --
 -- Indexes for table `departemen`
@@ -381,8 +369,7 @@ ALTER TABLE `hasil_penilaian`
 -- Indexes for table `jabatan`
 --
 ALTER TABLE `jabatan`
-  ADD PRIMARY KEY (`id_jabatan`),
-  ADD KEY `id_departemen` (`id_departemen`);
+  ADD PRIMARY KEY (`id_jabatan`);
 
 --
 -- Indexes for table `jenis_kriteria`
@@ -410,8 +397,7 @@ ALTER TABLE `kelompok_nilai`
 ALTER TABLE `kriteria`
   ADD PRIMARY KEY (`id_kriteria`),
   ADD KEY `id_jenis_kriteria` (`id_jenis_kriteria`),
-  ADD KEY `id_departemen` (`id_departemen`),
-  ADD KEY `id_jabatan` (`id_jabatan`);
+  ADD KEY `id_departemen` (`id_departemen`);
 
 --
 -- Indexes for table `nilai`
@@ -434,8 +420,10 @@ ALTER TABLE `penilaian`
 --
 ALTER TABLE `subkriteria`
   ADD PRIMARY KEY (`id_subkriteria`),
-  ADD KEY `id_kriteria` (`id_kriteria`),
-  ADD KEY `id_kelompok_nilai` (`id_kelompok_nilai`);
+  ADD KEY `id_kelompok_nilai` (`id_kelompok_nilai`),
+  ADD KEY `id_jenis_kriteria` (`id_jenis_kriteria`),
+  ADD KEY `id_departemen` (`id_departemen`),
+  ADD KEY `id_jabatan` (`id_jabatan`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -445,7 +433,7 @@ ALTER TABLE `subkriteria`
 -- AUTO_INCREMENT for table `bobot_gap`
 --
 ALTER TABLE `bobot_gap`
-  MODIFY `id_bobot` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_bobot` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `departemen`
 --
@@ -470,7 +458,7 @@ ALTER TABLE `jenis_kriteria`
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `kelompok_nilai`
 --
@@ -485,26 +473,20 @@ ALTER TABLE `kriteria`
 -- AUTO_INCREMENT for table `nilai`
 --
 ALTER TABLE `nilai`
-  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 --
 -- AUTO_INCREMENT for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  MODIFY `id_penilaian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_penilaian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `subkriteria`
 --
 ALTER TABLE `subkriteria`
-  MODIFY `id_subkriteria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_subkriteria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `bobot_gap`
---
-ALTER TABLE `bobot_gap`
-  ADD CONSTRAINT `bobot_gap_ibfk_1` FOREIGN KEY (`id_penilaian`) REFERENCES `penilaian` (`id_penilaian`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `hasil_penilaian`
@@ -512,12 +494,6 @@ ALTER TABLE `bobot_gap`
 ALTER TABLE `hasil_penilaian`
   ADD CONSTRAINT `hasil_penilaian_ibfk_1` FOREIGN KEY (`id_penilaian`) REFERENCES `penilaian` (`id_penilaian`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `hasil_penilaian_ibfk_2` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id_karyawan`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `jabatan`
---
-ALTER TABLE `jabatan`
-  ADD CONSTRAINT `jabatan_ibfk_1` FOREIGN KEY (`id_departemen`) REFERENCES `departemen` (`id_departemen`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `karyawan`
@@ -531,8 +507,7 @@ ALTER TABLE `karyawan`
 --
 ALTER TABLE `kriteria`
   ADD CONSTRAINT `kriteria_ibfk_1` FOREIGN KEY (`id_jenis_kriteria`) REFERENCES `jenis_kriteria` (`id_jenis_kriteria`),
-  ADD CONSTRAINT `kriteria_ibfk_2` FOREIGN KEY (`id_departemen`) REFERENCES `departemen` (`id_departemen`),
-  ADD CONSTRAINT `kriteria_ibfk_3` FOREIGN KEY (`id_jabatan`) REFERENCES `jabatan` (`id_jabatan`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `kriteria_ibfk_2` FOREIGN KEY (`id_departemen`) REFERENCES `departemen` (`id_departemen`);
 
 --
 -- Constraints for table `nilai`
@@ -547,8 +522,10 @@ ALTER TABLE `nilai`
 -- Constraints for table `subkriteria`
 --
 ALTER TABLE `subkriteria`
-  ADD CONSTRAINT `subkriteria_ibfk_1` FOREIGN KEY (`id_kriteria`) REFERENCES `kriteria` (`id_kriteria`),
-  ADD CONSTRAINT `subkriteria_ibfk_2` FOREIGN KEY (`id_kelompok_nilai`) REFERENCES `kelompok_nilai` (`id_kelompok_nilai`);
+  ADD CONSTRAINT `subkriteria_ibfk_2` FOREIGN KEY (`id_kelompok_nilai`) REFERENCES `kelompok_nilai` (`id_kelompok_nilai`),
+  ADD CONSTRAINT `subkriteria_ibfk_3` FOREIGN KEY (`id_jenis_kriteria`) REFERENCES `jenis_kriteria` (`id_jenis_kriteria`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `subkriteria_ibfk_4` FOREIGN KEY (`id_departemen`) REFERENCES `departemen` (`id_departemen`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `subkriteria_ibfk_5` FOREIGN KEY (`id_jabatan`) REFERENCES `jabatan` (`id_jabatan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

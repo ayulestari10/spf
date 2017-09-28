@@ -15,11 +15,11 @@ class Gap_analysis_m extends MY_Model
 	public function profil_jabatan($id_jenis_kriteria, $id_departemen, $id_jabatan)
 	{
 		$this->db->select('id_subkriteria, subkriteria.standar_nilai AS profil_jabatan');
-		$this->db->from('kriteria');
-		$this->db->join('subkriteria', 'kriteria.id_kriteria = subkriteria.id_kriteria', 'left');
-		$this->db->where('kriteria.id_jabatan', $id_jabatan);
-		$this->db->where('kriteria.id_jenis_kriteria', $id_jenis_kriteria);
-		$this->db->where('kriteria.id_departemen', $id_departemen);
+		$this->db->from('jenis_kriteria');
+		$this->db->join('subkriteria', 'jenis_kriteria.id_jenis_kriteria = subkriteria.id_jenis_kriteria', 'left');
+		$this->db->where('subkriteria.id_jabatan', $id_jabatan);
+		$this->db->where('subkriteria.id_jenis_kriteria', $id_jenis_kriteria);
+		$this->db->where('subkriteria.id_departemen', $id_departemen);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -49,7 +49,7 @@ class Gap_analysis_m extends MY_Model
 		if ($result_length > 0)
 		{
 			$this->load->model('bobot_gap_m');
-			$bobot_gap = $this->bobot_gap_m->get(['id_penilaian' => $id_penilaian]);
+			$bobot_gap = $this->bobot_gap_m->get();
 			$bobot = [];
 			foreach ($bobot_gap as $row)
 			{

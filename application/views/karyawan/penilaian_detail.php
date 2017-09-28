@@ -11,7 +11,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Data Penilaian                                                             
+                            Data  Penilaian                                                             
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <style type="text/css">
@@ -116,7 +116,7 @@
                                         </td>
                                         <?php else: ?>
                                             <td align="center">
-                                                <a href="<?= base_url('direktur' . '/detail-nilai?id_penilaian=' . $id_penilaian . '&id_karyawan=' . $row->id_karyawan) ?>" class="btn btn-primary btn-sm waves-effect"><i class="fa fa-eye"></i> Lihat nilai</a>
+                                                <a href="<?= base_url('karyawan' . '/detail-nilai?id_penilaian=' . $id_penilaian . '&id_karyawan=' . $row->id_karyawan) ?>" class="btn btn-primary btn-sm waves-effect"><i class="fa fa-eye"></i> Lihat nilai</a>
                                             </td>
                                         <?php endif; ?>
                                     </tr>
@@ -126,9 +126,6 @@
                             <!-- /.table-responsive -->
                         </div>
                         <!-- /.panel-body -->
-                        <div class="panel-footer">
-                            <a href="<?= base_url('direktur/unduh-laporan?id_penilaian=' . $id_penilaian) ?>" class="btn btn-primary btn-lg"><i class="fa fa-download"></i> Unduh Laporan</a>
-                        </div>
                     </div>
                     <!-- /.panel -->
                 </div>
@@ -149,7 +146,7 @@
 
         function acc_penilaian(id_karyawan) {
             $.ajax({
-                url: '<?= base_url('direktur' . '/penilaian-detail?id_penilaian=' . $id_penilaian) ?>',
+                url: '<?= base_url('karyawan' . '/penilaian-detail?id_penilaian=' . $id_penilaian) ?>',
                 type: 'POST',
                 data: {
                     validasi: true,

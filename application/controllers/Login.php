@@ -24,7 +24,7 @@ class Login extends MY_Controller
 				{
 					redirect('manajer');
 				}
-				else if ($this->data['id_jabatan'] == 3)
+				else if ($this->data['id_jabatan'] == 4)
 				{
 					redirect('direktur');
 				}

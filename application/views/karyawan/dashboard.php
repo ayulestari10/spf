@@ -52,6 +52,25 @@
                                 </a>
                             </div>
                         </div><!-- ./col -->
+                        <div class="col-lg-3 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>
+                                        <?= count($penilaian) ?> <!-- <sup style="font-size: 20px">%</sup> -->
+                                    </h3>
+                                    <p>
+                                        Kelola Data Karyawan
+                                    </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <a href="<?= base_url('karyawan/karyawan') ?>" class="small-box-footer">
+                                    Selengkapnya <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div><!-- ./col -->
                         <?php endif; ?>
                     </div><!-- /.row -->
                 </section><!-- /.content -->

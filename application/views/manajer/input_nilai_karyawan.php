@@ -60,23 +60,13 @@
             <?= form_open('manajer/input-nilai-karyawan?id_penilaian=' . $id_penilaian . '&id_karyawan=' . $id_karyawan) ?>
                 <div class="row">
                     <div class="col-md-8 col-md-offset-1">
-                        <?php foreach ($kriteria as $row): ?>
+                        <?php foreach ($jenis_kriteria as $row): ?>
                             <h4>
-                                <?php  
-                                    $jenis_kriteria = $this->jenis_kriteria_m->get_row(['id_jenis_kriteria' => $row->id_jenis_kriteria]);
-                                    if (isset($jenis_kriteria))
-                                    {
-                                        echo $jenis_kriteria->nama_kriteria;
-                                    }
-                                    else
-                                    {
-                                        echo 'Nama kriteria tidak ditemukan';
-                                    }
-                                ?>
+                                <?= $row->nama_kriteria ?>
                             </h4>
                             <table class="table table-bordered">
                                 <?php 
-                                    $subkriteria = $this->subkriteria_m->get(['id_kriteria' => $row->id_kriteria]);
+                                    $subkriteria = $this->subkriteria_m->get(['id_jenis_kriteria' => $row->id_jenis_kriteria, 'id_departemen' => $id_departemen, 'id_jabatan' => $id_jabatan]);
                                     foreach ($subkriteria as $sub):
                                 ?>
                                     <tr>
@@ -101,13 +91,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <?php if (count($kriteria) > 0): ?>
+                    <?php if (count($subkriteria) > 0): ?>
                     <div class="col-md-8 col-md-offset-1">
                         <input type="submit" name="submit" class="btn btn-success" value="Submit">
                     </div>
                     <?php else: ?>
                     <div class="col-md-8 col-md-offset-1">
-                        <?= 'Departemen ' . $departemen->nama . ' dengan jabatan ' . $jabatan->nama . ' belum memiliki kriteria penilaian. Silahkan buat kriteria penilaiannya terlebih dahulu' ?>
+                        <?= 'Departemen ' . $departemen->nama . ' dengan jabatan ' . $jabatan->nama . ' belum memiliki kriteria penilaian. Silahkan hubungi departemen HRD untuk membuat kriteria penilaian' ?>
                     </div>
                     <?php endif ?>
                 </div>

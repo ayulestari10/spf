@@ -26,7 +26,7 @@ class MY_Controller extends CI_Controller
 		return $this->input->get($name);
 	}
 
-	public function flashmsg($msg, $type = 'success',$name='msg')
+	public function flashmsg($msg, $type = 'success',$name = 'msg')
 	{
 		return $this->session->set_flashdata($name, '<div class="alert alert-'.$type.' alert-dismissable"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.$msg.'</div>');
 	}

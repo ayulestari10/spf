@@ -7,10 +7,14 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
-            <?php  
-                $msg = $this->session->flashdata('msg');
-                if (isset($msg)) echo $msg;
-            ?>
+            <div class="row">
+                <div class="col-md-11">
+                    <?php  
+                        $msg = $this->session->flashdata('msg');
+                        if (isset($msg)) echo $msg;
+                    ?>  
+                </div>
+            </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -37,14 +41,7 @@
                                         <td><?= $row->tgl_penilaian ?></td>
                                         <td><?= $row->thn_penilaian ?></td>
                                         <td align="center">
-                                            <?php  
-                                                $hasil_penilaian = $this->hasil_penilaian_m->get_row(['id_karyawan' => $user->id_karyawan, 'id_penilaian' => $row->id_penilaian]);
-                                                if ($hasil_penilaian):
-                                            ?>
-                                            <a href="<?= base_url('karyawan/hasil-akhir-penilaian?id_penilaian=' . $row->id_penilaian) ?>" class="btn btn-primary waves-effect"><i class="fa fa-eye"></i> Lihat hasil</a>
-                                            <?php else: ?>
-                                                <span class="text-danger">Belum dinilai</span>
-                                            <?php endif; ?>
+                                            <a href="<?= base_url('direktur' . '/penilaian-detail?id_penilaian=' . $row->id_penilaian) ?>" class="btn btn-primary waves-effect"><i class="fa fa-eye"></i> View</a>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

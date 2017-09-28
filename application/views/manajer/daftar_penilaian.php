@@ -24,7 +24,7 @@
                             <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-                                        <th>Standard Requirement</th>
+                                        <!-- <th>Standard Requirement</th> -->
                                         <th>Tanggal Penilaian</th>
                                         <th>Tahun Penilaian</th>
                                         <th>Action</th>
@@ -33,7 +33,7 @@
                                 <tbody>
                                     <?php foreach ($penilaian as $row): ?>
                                     <tr>
-                                        <td><?= $row->standar_requirement ?></td>
+                                        <!-- <td><?= $row->standar_requirement ?></td> -->
                                         <td><?= $row->tgl_penilaian ?></td>
                                         <td><?= $row->thn_penilaian ?></td>
                                         <td align="center">

@@ -116,7 +116,15 @@ class Manajer extends MY_Controller
 			exit;
 		}
 
-		$this->data['karyawan'] = $this->data['id_departemen'] != 2 ? $this->karyawan_m->get(['id_departemen' => $this->data['id_departemen']]) : $this->karyawan_m->get();
+		$this->data['karyawan'] = $this->data['id_departemen'] != 2 ? $this->karyawan_m->get(['id_departemen' => $this->data['id_departemen'], 'id_jabatan !=' => 2]) : $this->karyawan_m->get(['id_jabatan !=' => 2]);
+		if ($this->data['id_departemen'] == 2 && $this->data['id_jabatan'] == 2)
+		{
+			$this->data['karyawan'] = $this->karyawan_m->get('id_jabatan = 1 OR id_jabatan = 3');
+		}
+		else if ($this->data['id_jabatan'] == 2)
+		{
+			$this->data['karyawan'] = $this->karyawan_m->get('id_departemen = ' . $this->data['id_departemen'] . ' AND (id_jabatan = 1 OR id_jabatan = 3)');
+		}
 		$this->data['title'] 	= 'Data Penilaian';
 		$this->data['content'] 	= 'manajer/penilaian';
 		$this->template($this->data);
@@ -133,7 +141,7 @@ class Manajer extends MY_Controller
 		if ($this->POST('submit'))
 		{
 			$this->data['entri_penilaian'] = [
-				'standar_requirement'	=> $this->POST('standar_requirement'),
+				// 'standar_requirement'	=> $this->POST('standar_requirement'),
 				'tgl_penilaian'			=> $this->POST('tgl_penilaian'),
 				'thn_penilaian'			=> $this->POST('thn_penilaian')
 			];
@@ -141,36 +149,71 @@ class Manajer extends MY_Controller
 			$this->load->model('penilaian_m');
 			$this->penilaian_m->insert($this->data['entri_penilaian']);
 
-			$dynamic_form_count = count($this->POST('selisih'));
-			$selisih 		= $this->POST('selisih');
-			$bobot_nilai	= $this->POST('bobot_nilai');
-			$keterangan		= $this->POST('keterangan');
-			$id_penilaian	= $this->db->insert_id();
-			$this->load->model('bobot_gap_m');
-
-			for ($i = 0; $i < $dynamic_form_count; $i++)
-			{
-				if (empty($selisih[$i]) or empty($bobot_nilai[$i]))
-				{
-					continue;
-				}
-
-				$this->data['entri_bobot_gap'] = [
-					'id_penilaian'	=> $id_penilaian,
-					'selisih'		=> $selisih[$i],
-					'bobot_nilai'	=> $bobot_nilai[$i],
-					'keterangan'	=> $keterangan[$i]
-				];
-				$this->bobot_gap_m->insert($this->data['entri_bobot_gap']);
-			}
-
-			$this->flashmsg('Data penilaian berhasil ditambahkan');
+			$this->flashmsg('<i class="fa fa-check"></i> Data penilaian berhasil ditambahkan');
 			redirect('manajer/input-penilaian');
 			exit;
 		}
 
 		$this->data['title'] 	= 'Input Penilaian';
 		$this->data['content'] 	= 'manajer/input_penilaian';
+		$this->template($this->data);
+	}
+
+	public function bobot_gap()
+	{
+		if ($this->data['id_departemen'] != 2) 
+		{
+			redirect('manajer');
+			exit;
+		}
+
+		$this->load->model('bobot_gap_m');
+
+		if ($this->POST('submit'))
+		{
+			$existing_data_count 	= count($this->POST('id_bobot'));
+			$dynamic_form_count		= count($this->POST('selisih'));
+			$selisih 				= $this->POST('selisih');
+			$bobot_nilai 			= $this->POST('bobot_nilai');
+			$keterangan 			= $this->POST('keterangan');
+			$id_bobot				= $this->POST('id_bobot');
+
+			for ($i = 0; $i < $existing_data_count; $i++)
+			{
+				if (trim($selisih[$i]) == '' or trim($bobot_nilai[$i]) == '')
+				{
+					continue;
+				}
+
+				$this->bobot_gap_m->update($id_bobot[$i], [
+					'selisih'		=> $selisih[$i],
+					'bobot_nilai'	=> $bobot_nilai[$i],
+					'keterangan'	=> $keterangan[$i]
+				]);
+			}
+
+			for ($i = $existing_data_count; $i < $dynamic_form_count; $i++)
+			{
+				if (trim($selisih[$i]) == '' or trim($bobot_nilai[$i]) == '')
+				{
+					continue;
+				}
+
+				$this->bobot_gap_m->insert([
+					'selisih'		=> $selisih[$i],
+					'bobot_nilai'	=> $bobot_nilai[$i],
+					'keterangan'	=> $keterangan[$i]
+				]);	
+			}
+
+			$this->flashmsg('<i class="fa fa-check"></i> Pengaturan bobot gap berhasil disimpan');
+			redirect('manajer/bobot-gap');
+			exit;
+		}
+
+		$this->data['bobot_gap']	= $this->bobot_gap_m->get();
+		$this->data['title'] 		= 'Pengaturan Bobot Gap';
+		$this->data['content'] 		= 'manajer/pengaturan_bobot_gap';
 		$this->template($this->data);
 	}
 
@@ -190,7 +233,7 @@ class Manajer extends MY_Controller
 			$action = $this->input->get('action');
 			if ($action == 'get_jabatan')
 			{
-				$jabatan = $this->jabatan_m->get(['id_departemen' => $this->input->get('id_departemen')]);
+				$jabatan = $this->jabatan_m->get();
 				echo json_encode($jabatan);
 			}
 			else if ($action == 'get_kelompok_nilai')
@@ -208,18 +251,18 @@ class Manajer extends MY_Controller
 
 		if ($this->POST('submit'))
 		{
-			$this->data['entri_kriteria'] = [
-				'id_jenis_kriteria'	=> $this->POST('id_jenis_kriteria'),
-				'id_departemen'		=> $this->POST('id_departemen'),
-				'id_jabatan'		=> $this->POST('id_jabatan')
-			];
-			$this->kriteria_m->insert($this->data['entri_kriteria']);
+			// $this->data['entri_kriteria'] = [
+			// 	'id_jenis_kriteria'	=> $this->POST('id_jenis_kriteria'),
+			// 	'id_departemen'		=> $this->POST('id_departemen'),
+			// 	'id_jabatan'		=> $this->POST('id_jabatan')
+			// ];
+			// $this->kriteria_m->insert($this->data['entri_kriteria']);
 
 			$dynamic_form_count = count($this->POST('nama'));
 			$nama 				= $this->POST('nama');
 			$standar_nilai		= $this->POST('standar_nilai');
 			$id_kelompok_nilai	= $this->POST('id_kelompok_nilai');
-			$id_kriteria 		= $this->db->insert_id();
+			$id_jenis_kriteria 	= $this->POST('id_jenis_kriteria');
 
 			for ($i = 0; $i < $dynamic_form_count; $i++)
 			{
@@ -229,10 +272,12 @@ class Manajer extends MY_Controller
 				}
 
 				$this->data['entri_subkriteria'] = [
-					'id_kriteria'		=> $id_kriteria,
+					'id_jenis_kriteria'	=> $id_jenis_kriteria[$i],
 					'id_kelompok_nilai'	=> $id_kelompok_nilai[$i],
 					'nama'				=> $nama[$i],
-					'standar_nilai'		=> $standar_nilai[$i]
+					'standar_nilai'		=> $standar_nilai[$i],
+					'id_departemen'		=> $this->POST('id_departemen'),
+					'id_jabatan'		=> $this->POST('id_jabatan')
 				];
 				$this->subkriteria_m->insert($this->data['entri_subkriteria']);
 			}
@@ -241,6 +286,15 @@ class Manajer extends MY_Controller
 			redirect('manajer/input-kriteria');
 			exit;
 		}
+
+		$this->data['kompetensi'] = [
+            'inti'  => [
+                'Kreatif', 'Integritas & Kejujuran', 'Aktif Berkomunikasi', 'Tanggung Jawab', 'Disiplin', 'Respek & Saling Percaya', 'Inisiatif', 'Kerja Sama', 'Fokus ke Pelanggan'
+            ],
+            'peran' => [
+                'Managerial', 'Leadership'
+            ]
+        ];
 
 		$this->data['departemen']		= $this->departemen_m->get();
 		$this->data['jabatan']			= $this->jabatan_m->get();
@@ -280,11 +334,11 @@ class Manajer extends MY_Controller
 		$this->data['id_departemen'] 	= $this->data['karyawan']->id_departemen;
 		$this->data['id_jabatan']		= $this->data['karyawan']->id_jabatan;
 
-		$this->load->model('kriteria_m');
-		$this->data['kriteria']	= $this->kriteria_m->get([
-			'id_departemen'	=> $this->data['id_departemen'],
-			'id_jabatan'	=> $this->data['id_jabatan']
-		]);
+		// $this->load->model('kriteria_m');
+		// $this->data['kriteria']	= $this->kriteria_m->get([
+		// 	'id_departemen'	=> $this->data['id_departemen'],
+		// 	// 'id_jabatan'	=> $this->data['id_jabatan']
+		// ]);
 
 		$this->load->model('jenis_kriteria_m');
 		$this->load->model('departemen_m');
@@ -339,7 +393,7 @@ class Manajer extends MY_Controller
 				$nilai_karyawan = $this->nilai_m->get(['id_karyawan' => $this->data['id_karyawan']]);
 
 				$this->load->model('bobot_gap_m');
-				$bobot_gap = $this->bobot_gap_m->get(['id_penilaian' => $this->data['id_penilaian']]);
+				$bobot_gap = $this->bobot_gap_m->get();
 				$bobot = [];
 				foreach ($bobot_gap as $bg)
 				{
@@ -385,8 +439,9 @@ class Manajer extends MY_Controller
 			exit;
 		}
 
-		$this->data['title']	= 'Input Nilai Karyawan';
-		$this->data['content']	= 'manajer/input_nilai_karyawan';
+		$this->data['jenis_kriteria']	= $this->jenis_kriteria_m->get();
+		$this->data['title']			= 'Input Nilai Karyawan';
+		$this->data['content']			= 'manajer/input_nilai_karyawan';
 		$this->template($this->data);
 	}
 
