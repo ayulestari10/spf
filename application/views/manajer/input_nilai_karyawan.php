@@ -65,12 +65,18 @@
                                 <?= $row->nama_kriteria ?>
                             </h4>
                             <table class="table table-bordered">
+                                <tr>
+                                    <td></td>
+                                    <td style="width: 5%; text-align: center;">Standar Nilai</td>
+                                    <td></td>
+                                </tr>
                                 <?php 
                                     $subkriteria = $this->subkriteria_m->get(['id_jenis_kriteria' => $row->id_jenis_kriteria, 'id_departemen' => $id_departemen, 'id_jabatan' => $id_jabatan]);
                                     foreach ($subkriteria as $sub):
                                 ?>
                                     <tr>
                                         <td><b><?= $sub->nama ?></b></td>
+                                        <td align="middle"><?= $sub->standar_nilai ?></td>
                                         <td style="width: 13%;">
                                             <?php  
                                                 $check_nilai = $this->nilai_m->get_row([

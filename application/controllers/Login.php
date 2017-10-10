@@ -17,6 +17,7 @@ class Login extends MY_Controller
 		{
 			$this->data['id_departemen'] 	= $this->session->userdata('id_departemen');
 			$this->data['id_jabatan']		= $this->session->userdata('id_jabatan');
+			$this->data['admin']			= $this->session->userdata('admin');
 
 			if (isset($this->data['id_departemen'], $this->data['id_jabatan']))
 			{
@@ -33,6 +34,11 @@ class Login extends MY_Controller
 					redirect('karyawan');
 				}
 				exit;
+			}
+
+			if (isset($this->data['admin']))
+			{
+				redirect('admin');
 			}
 		}
 	}
@@ -57,6 +63,12 @@ class Login extends MY_Controller
 			];
 
 			$result = $this->Karyawan_m->check_login($data['username'], $data['password']);
+
+			if (!isset($result))
+			{
+				$this->load->model('admin_m');
+				$result = $this->admin_m->check_login($data['username'], $data['password']);
+			}
 
 			if (!isset($result)) 
 			{

@@ -11,10 +11,9 @@ class Admin extends MY_Controller
   	function __construct()
 	{
 	    parent::__construct();		
-		$this->data['id_departemen'] 	= $this->session->userdata('id_departemen');
-		$this->data['id_jabatan']		= $this->session->userdata('id_jabatan');
 
-		if ($this->data['id_departemen'] != 1 && $this->data['id_jabatan'] != 2)
+	    $this->data['admin'] = $this->session->userdata('admin');
+		if (!isset($this->data['admin']))
 		{
 			redirect('logout');
 			$this->flashmsg('Anda tidak diizinkan untuk mengakses halaman ini','danger');
@@ -48,7 +47,6 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_jabatan" => $this->POST("id_jabatan"),
-				"id_departemen" => $this->POST("id_departemen"),
 				"nama" => $this->POST("nama"),
 			];
 			$this->Jabatan_m->insert($this->data['entry']);
@@ -66,7 +64,6 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_jabatan" => $this->POST("id_jabatan"),
-				"id_departemen" => $this->POST("id_departemen"),
 				"nama" => $this->POST("nama"),
 			];
 			$this->Jabatan_m->update($this->POST('edit_id_jabatan'), $this->data['entry']);
@@ -82,7 +79,7 @@ class Admin extends MY_Controller
 		}
 				
 		$this->data['data']		= $this->Jabatan_m->get();
-		$this->data['columns']	= ["id_jabatan","id_departemen","nama",];
+		$this->data['columns']	= ["id_jabatan","nama",];
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/jabatan_all';
 		$this->template($this->data);
@@ -395,7 +392,6 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_subkriteria" => $this->POST("id_subkriteria"),
-				"id_kriteria" => $this->POST("id_kriteria"),
 				"id_kelompok_nilai" => $this->POST("id_kelompok_nilai"),
 				"nama" => $this->POST("nama"),
 				"standar_nilai" => $this->POST("standar_nilai"),
@@ -415,7 +411,6 @@ class Admin extends MY_Controller
 		{
 			$this->data['entry'] = [
 				"id_subkriteria" => $this->POST("id_subkriteria"),
-				"id_kriteria" => $this->POST("id_kriteria"),
 				"id_kelompok_nilai" => $this->POST("id_kelompok_nilai"),
 				"nama" => $this->POST("nama"),
 				"standar_nilai" => $this->POST("standar_nilai"),
@@ -433,7 +428,7 @@ class Admin extends MY_Controller
 		}
 				
 		$this->data['data']		= $this->Subkriteria_m->get();
-		$this->data['columns']	= ["id_subkriteria","id_kriteria","id_kelompok_nilai","nama","standar_nilai",];
+		$this->data['columns']	= ["id_subkriteria","id_kelompok_nilai","nama","standar_nilai",];
 		$this->data['title'] 	= 'Title';
 		$this->data['content'] 	= 'admin/subkriteria_all';
 		$this->template($this->data);

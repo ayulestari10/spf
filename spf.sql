@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 28, 2017 at 06:27 PM
+-- Generation Time: Oct 10, 2017 at 04:56 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -42,6 +42,25 @@ CREATE TABLE `acc_penilaian` (
 INSERT INTO `acc_penilaian` (`id_hasil`, `validasi_hrd`, `validasi_dept_manajer`, `validasi_pimpinan`, `status_acc`, `tgl_acc`) VALUES
 (1, 0, 1, 1, 'Tidak valid', '2017-09-28'),
 (2, 0, 1, 0, 'Tidak valid', '2017-09-28');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id_admin` int(11) NOT NULL,
+  `username` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id_admin`, `username`, `password`) VALUES
+(1, 'azhary', '985fabf8f96dc1c4c306341031569937');
 
 -- --------------------------------------------------------
 
@@ -112,7 +131,7 @@ CREATE TABLE `hasil_penilaian` (
 
 INSERT INTO `hasil_penilaian` (`id_hasil`, `id_penilaian`, `id_karyawan`, `kompetensi_inti`, `kompetensi_peran`, `kompetensi_fungsional`, `hasil_akhir`) VALUES
 (1, 1, 4, 4.8, 4.3, 5, 4.695),
-(2, 2, 4, 4.53333, 4.6, 4.6, 4.55667);
+(2, 2, 4, 4.33333, 4.6, 4.6, 4.42667);
 
 -- --------------------------------------------------------
 
@@ -266,7 +285,7 @@ INSERT INTO `nilai` (`id_nilai`, `id_penilaian`, `id_karyawan`, `id_jenis_kriter
 (76, 1, 4, 5, 11, 4),
 (77, 1, 4, 6, 12, 3),
 (78, 1, 4, 6, 13, 3),
-(79, 2, 4, 4, 1, 3),
+(79, 2, 4, 4, 1, 0),
 (80, 2, 4, 4, 2, 2),
 (81, 2, 4, 4, 3, 3),
 (82, 2, 4, 4, 4, 2),
@@ -344,6 +363,12 @@ INSERT INTO `subkriteria` (`id_subkriteria`, `id_departemen`, `id_jabatan`, `id_
 --
 ALTER TABLE `acc_penilaian`
   ADD PRIMARY KEY (`id_hasil`);
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id_admin`);
 
 --
 -- Indexes for table `bobot_gap`
@@ -430,10 +455,15 @@ ALTER TABLE `subkriteria`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `bobot_gap`
 --
 ALTER TABLE `bobot_gap`
-  MODIFY `id_bobot` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_bobot` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `departemen`
 --
@@ -448,7 +478,7 @@ ALTER TABLE `hasil_penilaian`
 -- AUTO_INCREMENT for table `jabatan`
 --
 ALTER TABLE `jabatan`
-  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=346;
 --
 -- AUTO_INCREMENT for table `jenis_kriteria`
 --
