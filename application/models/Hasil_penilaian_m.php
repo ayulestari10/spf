@@ -15,5 +15,12 @@ class Hasil_penilaian_m extends MY_Model
 		$query = $this->db->query('SELECT * FROM (SELECT *, @rank := @rank + 1 AS rank FROM hasil_penilaian WHERE id_penilaian=' . $id_penilaian . ' ORDER BY hasil_akhir DESC) x');
 		return $query->result();
 	}
+
+	public function get_rank_karyawan($id_penilaian, $id_karyawan)
+	{
+		$this->db->query('SET @rank:=0;');
+		$query = $this->db->query('SELECT * FROM (SELECT *, @rank := @rank + 1 AS rank FROM hasil_penilaian WHERE id_penilaian=' . $id_penilaian . ' ORDER BY hasil_akhir DESC) x WHERE id_karyawan="' . $id_karyawan . '"');
+		return $query->result();
+	}
 }
 

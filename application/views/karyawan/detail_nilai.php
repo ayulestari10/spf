@@ -33,6 +33,7 @@
                                     <th>Standar</th>
                                     <th>Nilai</th>
                                     <th>Gap</th>
+                                    <th>Mis.</th>
                                 </thead>
                                 <tbody>
                                     <?php  
@@ -67,8 +68,13 @@
                                                         $gap_subkriteria []= $subkriteria->nama;
                                                     }
                                                 }
+                                                else
+                                                {
+                                                    $percentage = 0;
+                                                }
                                             ?>
                                         </td>
+                                        <td><?= isset($percentage) ? round($percentage, 2) . '%' : '0%' ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -98,6 +104,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <h5><i>Keterangan: Mis. 50% keatas disarankan untuk ikut pelatihan</i></h5>
                             <h4>Subkriteria yang direkomendasikan untuk diikuti pelatihan</h4>
                             <?php if (count($gap_subkriteria) <= 0): ?>
                                 <p>Tidak ada</p>

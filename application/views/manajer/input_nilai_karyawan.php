@@ -60,6 +60,25 @@
             <?= form_open('manajer/input-nilai-karyawan?id_penilaian=' . $id_penilaian . '&id_karyawan=' . $id_karyawan) ?>
                 <div class="row">
                     <div class="col-md-8 col-md-offset-1">
+                        <h4>Petunjuk Pengisian Nilai</h4>
+                        <table class="table table-bordered table-condensed" style="width: 40%;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Jabatan</th>
+                                    <th style="width: 30%; text-align: center;">Nilai Maks.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center;">Foreman</td>
+                                    <td style="text-align: center;">4</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">Supervisor</td>
+                                    <td style="text-align: center;">5</td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <?php foreach ($jenis_kriteria as $row): ?>
                             <h4>
                                 <?= $row->nama_kriteria ?>

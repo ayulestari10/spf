@@ -16,88 +16,80 @@
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
-        <!-- sidebar menu: : style can be found in sidebar.less -->
-        <?php if(isset($id_role) && $id_role == 1): ?>
-        <ul class="sidebar-menu">
-            <li class="active">
-                <a href="<?= base_url('admin') ?>">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('admin/karyawan') ?>">
-                    <i class="fa fa-user"></i>
-                    <span>Karyawan</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('admin/departemen') ?>">
-                    <i class="fa fa-archive"></i>
-                    <span>Departemen</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('admin/kriteria') ?>">
-                    <i class="ion ion-pie-graph"></i>
-                    <span>Kriteria</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('admin/subkriteria') ?>">
-                    <i class="fa fa-pencil"></i>
-                    <span>Sub Kriteria</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('admin/jabatan') ?>">
-                    <i class="fa fa-book"></i>
-                    <span>Jabatan</span>
-                </a>
-            </li>
-        </ul>
-        
-        <?php elseif(isset($id_role) && $id_role == 4): ?>
-        <ul class="sidebar-menu">
-            <li class="active">
-                <a href="<?= base_url('Karyawan') ?>">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('karyawan/data_karyawan') ?>">
-                    <i class="fa fa-user"></i>
-                    <span>Karyawan</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('karyawan/hasil_penilaian') ?>">
-                    <i class="fa fa-book"></i>
-                    <span>Hasil Karyawan</span>
-                </a>
-            </li>
-        </ul>
-
-        <?php else: ?>
-        
         <ul class="sidebar-menu">
             <li class="active">
                 <a href="<?= base_url('') ?>">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <!-- <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-book"></i>
-                    <span>Data Pinjaman</span>
-                    <i class="fa fa-angle-left pull-right"></i>
+            <?php if (isset($id_jabatan) && $id_jabatan == 2): ?>
+            <li>
+                <a href="<?= base_url('manajer/penilaian') ?>">
+                    <i class="fa fa-user"></i> <span>Beri Nilai Karyawan</span>
                 </a>
-                <ul class="treeview-menu">
-                    <li><a href="<?= base_url('ketua_koperasi/data_pinjaman') ?>"><i class="fa fa-angle-double-right"></i> Pinjaman</a></li>
-                    <li><a href="<?= base_url('ketua_koperasi/data_angsuran') ?>"><i class="fa fa-angle-double-right"></i> Angsuran</a></li>
-                </ul>
-            </li> -->
+            </li>
+                <?php if (isset($id_departemen) && $id_departemen == 2): ?>
+                <li>
+                    <a href="<?= base_url('manajer/input-penilaian') ?>">
+                        <i class="fa fa-book"></i> <span>Input Penilaian</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('manajer/input-kriteria') ?>">
+                        <i class="fa fa-book"></i> <span>Input Kriteria Penilaian</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('manajer/bobot-gap') ?>">
+                        <i class="fa fa-cog"></i> <span>Pengaturan Bobot Gap</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+            <?php elseif (isset($id_jabatan) && ($id_jabatan == 3 or $id_jabatan == 1)): ?>
+            <li>
+                <a href="<?= base_url('karyawan/daftar-penilaian') ?>">
+                    <i class="fa fa-book"></i> <span>Daftar Penilaian</span>
+                </a>
+            </li>
+                <?php if (isset($id_departemen) && $id_departemen == 2): ?>
+                <li>
+                    <a href="<?= base_url('karyawan/penilaian') ?>">
+                        <i class="fa fa-user"></i> <span>Penilaian Karyawan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('karyawan/karyawan') ?>">
+                        <i class="fa fa-users"></i> <span>Kelola Data Karyawan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('karyawan/input-penilaian') ?>">
+                        <i class="fa fa-book"></i> <span>Input Penilaian</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('karyawan/input-kriteria') ?>">
+                        <i class="fa fa-book"></i> <span>Input Kriteria</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('karyawan/departemen') ?>">
+                        <i class="fa fa-book"></i> <span>Kelola Data Departemen</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('karyawan/jabatan') ?>">
+                        <i class="fa fa-book"></i> <span>Kelola Data Jabatan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('karyawan/bobot-gap') ?>">
+                        <i class="fa fa-cog"></i> <span>Pengaturan Bobot Gap</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+            <?php endif; ?>
         </ul>
-        <?php endif; ?>
     </section>
     <!-- /.sidebar -->
 </aside>

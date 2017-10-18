@@ -29,10 +29,45 @@ class Direktur extends MY_Controller
 		$this->template($this->data);
 	}
 
-	public function penilaian_detail()
+	public function kategori_departemen()
 	{
 		$this->data['id_penilaian'] = $this->GET('id_penilaian');
 		if (!isset($this->data['id_penilaian']))
+		{
+			redirect('direktur');
+			exit;
+		}
+
+		$this->load->model('departemen_m');
+		$this->data['departemen']	= $this->departemen_m->get();
+		$this->data['title']		= 'Kategori Departemen';
+		$this->data['content']		= 'direktur/kategori_departemen';
+		$this->template($this->data);
+	}
+
+	public function kategori_jabatan()
+	{
+		$this->data['id_penilaian'] 	= $this->GET('id_penilaian');
+		$this->data['id_departemen']	= $this->GET('id_departemen');
+		if (!isset($this->data['id_penilaian'], $this->data['id_departemen']))
+		{
+			redirect('direktur');
+			exit;
+		}
+
+		$this->load->model('jabatan_m');
+		$this->data['jabatan']		= $this->jabatan_m->get();
+		$this->data['title']		= 'Kategori Jabatan';
+		$this->data['content']		= 'direktur/kategori_jabatan';
+		$this->template($this->data);
+	}
+
+	public function penilaian_detail()
+	{
+		$this->data['id_penilaian'] = $this->GET('id_penilaian');
+		$this->data['id_departemen_x'] = $this->GET('id_departemen');
+		$this->data['id_jabatan_x'] = $this->GET('id_jabatan');
+		if (!isset($this->data['id_penilaian'], $this->data['id_departemen'], $this->data['id_jabatan']))
 		{
 			$this->flashmsg('<i class="fa fa-warning"></i> Data penilaian tidak ditemukan', 'danger');
 			redirect('manajer/penilaian');
@@ -105,7 +140,7 @@ class Direktur extends MY_Controller
 			exit;
 		}
 
-		$this->data['karyawan'] = $this->karyawan_m->get('id_jabatan = 1 OR id_jabatan = 3');
+		$this->data['karyawan'] = $this->karyawan_m->get(['id_departemen' => $this->data['id_departemen_x'], 'id_jabatan' => $this->data['id_jabatan_x']]);
 		$this->data['title'] 	= 'Data Penilaian';
 		$this->data['content'] 	= 'direktur/penilaian';
 		$this->template($this->data);

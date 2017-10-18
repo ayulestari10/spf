@@ -41,7 +41,7 @@
                                         <td><?= $row->tgl_penilaian ?></td>
                                         <td><?= $row->thn_penilaian ?></td>
                                         <td align="center">
-                                            <a href="<?= base_url('direktur' . '/penilaian-detail?id_penilaian=' . $row->id_penilaian) ?>" class="btn btn-primary waves-effect"><i class="fa fa-eye"></i> View</a>
+                                            <a href="<?= base_url('direktur' . '/kategori-departemen?id_penilaian=' . $row->id_penilaian) ?>" class="btn btn-primary waves-effect"><i class="fa fa-eye"></i> View</a>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

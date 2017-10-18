@@ -7,6 +7,23 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
+
+            <?php  
+                $arr = $this->hasil_penilaian_m->get_rank($id_penilaian);
+                $unsorted_arr = [];
+                foreach ($karyawan as $row)
+                {
+                    foreach ($arr as $el)
+                    {
+                        if ($el->id_karyawan == $row->id_karyawan)
+                        {
+                            $unsorted_arr []= $row;
+                            break;
+                        }
+                    }
+                }
+            ?>
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -24,6 +41,7 @@
                                         <th>Nama</th>
                                         <th>Departemen</th>
                                         <th>Jabatan</th>
+                                        <th>Ranking</th>
                                         <th>Status Penilaian</th>
                                         <th>Action</th>
                                     </tr>
@@ -57,6 +75,20 @@
                                                 {
                                                     echo '<font color="red">Data jabatan tidak ditemukan</font>';
                                                 }
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php  
+                                                $rank = 'Belum ada';
+                                                foreach ($unsorted_arr as $key => $value)
+                                                {
+                                                    if ($value->id_karyawan == $row->id_karyawan)
+                                                    {
+                                                        $rank = $key + 1;
+                                                        break;
+                                                    }       
+                                                }
+                                                echo $rank;
                                             ?>
                                         </td>
                                         <td id="karyawan-<?= $row->id_karyawan ?>"><button class="btn btn-<?php 
