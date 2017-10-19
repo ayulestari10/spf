@@ -39,11 +39,11 @@
                         <i class="fa fa-book"></i> <span>Input Kriteria Penilaian</span>
                     </a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="<?= base_url('manajer/bobot-gap') ?>">
                         <i class="fa fa-cog"></i> <span>Pengaturan Bobot Gap</span>
                     </a>
-                </li>
+                </li> -->
                 <?php endif; ?>
             <?php elseif (isset($id_jabatan) && ($id_jabatan == 3 or $id_jabatan == 1)): ?>
             <li>
@@ -52,11 +52,11 @@
                 </a>
             </li>
                 <?php if (isset($id_departemen) && $id_departemen == 2): ?>
-                <li>
+                <!-- <li>
                     <a href="<?= base_url('karyawan/penilaian') ?>">
                         <i class="fa fa-user"></i> <span>Penilaian Karyawan</span>
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <a href="<?= base_url('karyawan/karyawan') ?>">
                         <i class="fa fa-users"></i> <span>Kelola Data Karyawan</span>

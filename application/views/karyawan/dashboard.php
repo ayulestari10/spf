@@ -33,12 +33,11 @@
                             </div>
                         </div><!-- ./col -->
                         <?php if (isset($id_departemen) && $id_departemen == 2): ?>
-                        <div class="col-lg-3 col-xs-6">
-                            <!-- small box -->
+                        <!-- <div class="col-lg-3 col-xs-6">
                             <div class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?= count($penilaian) ?> <!-- <sup style="font-size: 20px">%</sup> -->
+                                        <?= count($penilaian) ?>
                                     </h3>
                                     <p>
                                         Penilaian Karyawan
@@ -51,7 +50,7 @@
                                     Selengkapnya <i class="fa fa-arrow-circle-right"></i>
                                 </a>
                             </div>
-                        </div><!-- ./col -->
+                        </div> --><!-- ./col -->
                         <div class="col-lg-3 col-xs-6">
                             <!-- small box -->
                             <div class="small-box bg-green">

@@ -33,7 +33,7 @@
                                     <th>Standar</th>
                                     <th>Nilai</th>
                                     <th>Gap</th>
-                                    <th>Mis.</th>
+                                    <th>(%)</th>
                                 </thead>
                                 <tbody>
                                     <?php  
@@ -59,18 +59,10 @@
                                             <?php 
                                                 $gap = $row->nilai - $subkriteria->standar_nilai; 
                                                 echo $gap;
-                                                if ($gap < 0)
+                                                $percentage = (float)$row->nilai/(float)$subkriteria->standar_nilai * 100;
+                                                if ($percentage <= 50)
                                                 {
-                                                    $gap *= -1;
-                                                    $percentage = (float)$gap/(float)$subkriteria->standar_nilai * 100;
-                                                    if ($percentage > 50)
-                                                    {
-                                                        $gap_subkriteria []= $subkriteria->nama;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    $percentage = 0;
+                                                    $gap_subkriteria []= $subkriteria->nama;
                                                 }
                                             ?>
                                         </td>
@@ -104,7 +96,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <h5><i>Keterangan: Mis. 50% keatas disarankan untuk ikut pelatihan</i></h5>
+                            <h5><i>Keterangan: (%) lebih kecil atau sama dengan 50% disarankan untuk ikut pelatihan</i></h5>
                             <h4>Subkriteria yang direkomendasikan untuk diikuti pelatihan</h4>
                             <?php if (count($gap_subkriteria) <= 0): ?>
                                 <p>Tidak ada</p>

@@ -159,63 +159,63 @@ class Manajer extends MY_Controller
 		$this->template($this->data);
 	}
 
-	public function bobot_gap()
-	{
-		if ($this->data['id_departemen'] != 2) 
-		{
-			redirect('manajer');
-			exit;
-		}
+	// public function bobot_gap()
+	// {
+	// 	if ($this->data['id_departemen'] != 2) 
+	// 	{
+	// 		redirect('manajer');
+	// 		exit;
+	// 	}
 
-		$this->load->model('bobot_gap_m');
+	// 	$this->load->model('bobot_gap_m');
 
-		if ($this->POST('submit'))
-		{
-			$existing_data_count 	= count($this->POST('id_bobot'));
-			$dynamic_form_count		= count($this->POST('selisih'));
-			$selisih 				= $this->POST('selisih');
-			$bobot_nilai 			= $this->POST('bobot_nilai');
-			$keterangan 			= $this->POST('keterangan');
-			$id_bobot				= $this->POST('id_bobot');
+	// 	if ($this->POST('submit'))
+	// 	{
+	// 		$existing_data_count 	= count($this->POST('id_bobot'));
+	// 		$dynamic_form_count		= count($this->POST('selisih'));
+	// 		$selisih 				= $this->POST('selisih');
+	// 		$bobot_nilai 			= $this->POST('bobot_nilai');
+	// 		$keterangan 			= $this->POST('keterangan');
+	// 		$id_bobot				= $this->POST('id_bobot');
 
-			for ($i = 0; $i < $existing_data_count; $i++)
-			{
-				if (trim($selisih[$i]) == '' or trim($bobot_nilai[$i]) == '')
-				{
-					continue;
-				}
+	// 		for ($i = 0; $i < $existing_data_count; $i++)
+	// 		{
+	// 			if (trim($selisih[$i]) == '' or trim($bobot_nilai[$i]) == '')
+	// 			{
+	// 				continue;
+	// 			}
 
-				$this->bobot_gap_m->update($id_bobot[$i], [
-					'selisih'		=> $selisih[$i],
-					'bobot_nilai'	=> $bobot_nilai[$i],
-					'keterangan'	=> $keterangan[$i]
-				]);
-			}
+	// 			$this->bobot_gap_m->update($id_bobot[$i], [
+	// 				'selisih'		=> $selisih[$i],
+	// 				'bobot_nilai'	=> $bobot_nilai[$i],
+	// 				'keterangan'	=> $keterangan[$i]
+	// 			]);
+	// 		}
 
-			for ($i = $existing_data_count; $i < $dynamic_form_count; $i++)
-			{
-				if (trim($selisih[$i]) == '' or trim($bobot_nilai[$i]) == '')
-				{
-					continue;
-				}
+	// 		for ($i = $existing_data_count; $i < $dynamic_form_count; $i++)
+	// 		{
+	// 			if (trim($selisih[$i]) == '' or trim($bobot_nilai[$i]) == '')
+	// 			{
+	// 				continue;
+	// 			}
 
-				$this->bobot_gap_m->insert([
-					'selisih'		=> $selisih[$i],
-					'bobot_nilai'	=> $bobot_nilai[$i],
-					'keterangan'	=> $keterangan[$i]
-				]);	
-			}
+	// 			$this->bobot_gap_m->insert([
+	// 				'selisih'		=> $selisih[$i],
+	// 				'bobot_nilai'	=> $bobot_nilai[$i],
+	// 				'keterangan'	=> $keterangan[$i]
+	// 			]);	
+	// 		}
 
-			$this->flashmsg('<i class="fa fa-check"></i> Pengaturan bobot gap berhasil disimpan');
-			redirect('manajer/bobot-gap');
-			exit;
-		}
+	// 		$this->flashmsg('<i class="fa fa-check"></i> Pengaturan bobot gap berhasil disimpan');
+	// 		redirect('manajer/bobot-gap');
+	// 		exit;
+	// 	}
 
-		$this->data['bobot_gap']	= $this->bobot_gap_m->get();
-		$this->data['title'] 		= 'Pengaturan Bobot Gap';
-		$this->data['content'] 		= 'manajer/pengaturan_bobot_gap';
-		$this->template($this->data);
-	}
+	// 	$this->data['bobot_gap']	= $this->bobot_gap_m->get();
+	// 	$this->data['title'] 		= 'Pengaturan Bobot Gap';
+	// 	$this->data['content'] 		= 'manajer/pengaturan_bobot_gap';
+	// 	$this->template($this->data);
+	// }
 
 	public function input_kriteria()
 	{

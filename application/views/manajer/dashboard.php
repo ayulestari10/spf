@@ -69,8 +69,7 @@
                                 </a>
                             </div>
                         </div><!-- ./col -->
-                        <div class="col-lg-3 col-xs-6">
-                            <!-- small box -->
+                        <!-- <div class="col-lg-3 col-xs-6">
                             <div class="small-box bg-green">
                                 <div class="inner">
                                     <h3>-</h3>
@@ -85,7 +84,7 @@
                                     Selengkapnya <i class="fa fa-arrow-circle-right"></i>
                                 </a>
                             </div>
-                        </div><!-- ./col -->
+                        </div> --><!-- ./col -->
                         <?php endif; ?>
                     </div><!-- /.row -->
                 </section><!-- /.content -->
