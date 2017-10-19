@@ -59,7 +59,15 @@
                                             <?php 
                                                 $gap = $row->nilai - $subkriteria->standar_nilai; 
                                                 echo $gap;
-                                                $percentage = (float)$row->nilai/(float)$subkriteria->standar_nilai * 100;
+                                                if ($subkriteria->standar_nilai <= 0)
+                                                {
+                                                    $percentage = 0;
+                                                }
+                                                else
+                                                {
+                                                    $percentage = (float)$row->nilai/(float)$subkriteria->standar_nilai * 100;
+                                                }
+                                            
                                                 if ($percentage <= 50)
                                                 {
                                                     $gap_subkriteria []= $subkriteria->nama;

@@ -157,10 +157,11 @@
 
         function addFormInput() {
             $.ajax({
-                url: '<?= base_url('manajer/input-kriteria?action=get_kelompok_nilai') ?>',
+                url: '<?= base_url('karyawan/input-kriteria?action=get_kelompok_nilai') ?>',
                 type: 'GET',
                 async: false,
                 success: function(response) {
+                    console.log(response);
                     var json = $.parseJSON(response);
                     var html = '<option>-- Pilih --</option>';
                     for (var i = 0; i < json.length; i++) {
